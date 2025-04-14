@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from './components/layout/Layout/index';
-import './App.css';
+import './styles/App.scss';
 
 function App() {
   return (
