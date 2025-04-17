@@ -1,0 +1,10 @@
+@use '../../../styles/variables' as *;
+
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: $background-color;
+  overflow-y: auto;
+  min-height: 0;
+  position: relative;
+} 

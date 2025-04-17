@@ -1,0 +1,77 @@
+@use '../../styles/variables' as *;
+
+.create-folder-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $text-color;
+}
+
+input, textarea {
+  padding: 10px 12px;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: $text-color;
+  background-color: $background-color;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+
+  &::placeholder {
+    color: $text-color-secondary;
+  }
+}
+
+.input-error {
+  border-color: $error-color;
+}
+
+.error-message {
+  font-size: 0.75rem;
+  color: $error-color;
+  margin-top: 4px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &-primary {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+
+    &:hover {
+      background-color: darken($primary-color, 5%);
+    }
+  }
+
+  &-secondary {
+    background-color: transparent;
+    color: $text-color;
+    border: 1px solid $border-color;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+} 
