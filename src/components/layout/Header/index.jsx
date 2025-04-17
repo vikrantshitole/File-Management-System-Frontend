@@ -5,10 +5,13 @@ import CreateFolderModal from '../../Modals/CreateFolderModal';
 import './Header.scss';
 import api from '../../../api/axios';
 import Breadcrumb from '../../common/Breadcrumb';
+import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
+  const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
+
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -22,6 +25,7 @@ const Header = () => {
   };
 
   const handleUploadDocument = () => {
+    setIsUploadFileModalOpen(true);
     // TODO: Implement upload document functionality
     setIsDropdownOpen(false);
   };
@@ -82,6 +86,11 @@ const Header = () => {
         onClose={() => setIsCreateFolderModalOpen(false)}
         onCreateFolder={handleCreateFolderSubmit}
       />
+      <UploadDocumentModal
+        isOpen={isUploadFileModalOpen}
+        onClose={() => setIsUploadFileModalOpen(false)}
+      />
+    
     </header>
   );
 };

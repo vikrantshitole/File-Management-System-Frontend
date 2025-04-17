@@ -24,7 +24,8 @@ const initialState = {
     }
   ],
   selectedFolder: null,
-  currentPath: '/'
+  currentPath: '/',
+  uploadFileId: null
 };
 
 // Create the slice
@@ -78,6 +79,9 @@ const folderSlice = createSlice({
     setFolders(state, action) {
       const { folders } = action.payload;
       state.folders = folders;
+    },
+    setUploadFileId: (state, action) => {
+      state.uploadFileId = action.payload;
     }
   },
 });
@@ -89,6 +93,7 @@ export const {
   addFolder,
   removeFolder,
   setFolders,
+  setUploadFileId
 } = folderSlice.actions;
 
 // Export selectors
@@ -99,6 +104,6 @@ export const selectFolderById = (state, folderId) =>
 export const selectFoldersByParentId = (state, parentId) => 
   state.folders.folders.filter(folder => folder.parentId === parentId);
 export const selectCurrentPath = (state) => state.folders.currentPath;
-
+export const selectUploadFileId = (state) => state.folder.uploadFileId;
 // Export reducer
 export default folderSlice.reducer; 
