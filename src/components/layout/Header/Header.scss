@@ -86,7 +86,7 @@
     }
 
     &--active {
-      background-color: color.adjust($background-color-light, $lightness: -10%);
+      background-color: color.adjust($primary-color, $alpha: -0.9);
       color: $primary-color;
     }
   }

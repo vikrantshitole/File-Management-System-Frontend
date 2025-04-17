@@ -4,10 +4,13 @@ import { Vector } from '../../common/icons';
 import './FolderTree.scss';
 import { useSelector } from 'react-redux';
 import { selectAllFolders } from '../../../store/slices/folderSlice';
+import CreateFolderModal from '../../Modals/CreateFolderModal';
+import api from '../../../api/axios';
 
 const FolderItem = ({ folder, level = 0 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
 
   const handleToggle = (e) => {
     e.stopPropagation();
@@ -16,9 +19,24 @@ const FolderItem = ({ folder, level = 0 }) => {
 
   const handleAddFolder = (e) => {
     e.stopPropagation();
-    // TODO: Implement add folder functionality
+    setIsCreateFolderModalOpen(true);
   };
 
+  const handleCreateFolderSubmit = (folderData) => {
+    api.post('/folders/create', 
+      {
+        ...folderData,
+        parent_id: folder.id,
+      }
+    )
+      .then((response) => {
+        console.log('Folder created successfully:', response.data);
+        setIsCreateFolderModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error creating folder:', error);
+      });
+  };
   return (
     <div className="folder-tree__item">
       <div
@@ -51,6 +69,12 @@ const FolderItem = ({ folder, level = 0 }) => {
           ))}
         </div>
       )}
+       <CreateFolderModal
+        isOpen={isCreateFolderModalOpen}
+        onClose={() => setIsCreateFolderModalOpen(false)}
+        onCreateFolder={handleCreateFolderSubmit}
+      />
+     
     </div>
   );
 };

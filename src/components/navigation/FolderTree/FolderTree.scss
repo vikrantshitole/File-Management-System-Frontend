@@ -84,9 +84,9 @@
     padding: 0;
     background: transparent;
     border: none;
-    color: $text-color-secondary;
+    color: $primary-color;
     cursor: pointer;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.2s ease, color 0.2s ease;
 
     &:hover {
@@ -94,9 +94,9 @@
     }
   }
 
-  &__item-content:hover &__add {
-    opacity: 1;
-  }
+  // &__item-content:hover &__add {
+  //   opacity: 1;
+  // }
 
   &__children {
     position: relative;
