@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ChevronRight, Plus } from 'react-feather';
 import { Vector } from '../../common/icons';
 import './FolderTree.scss';
+import { useSelector } from 'react-redux';
+import { selectAllFolders } from '../../../store/slices/folderSlice';
 
 const FolderItem = ({ folder, level = 0 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -22,8 +24,6 @@ const FolderItem = ({ folder, level = 0 }) => {
       <div
         className={`folder-tree__item-content ${isExpanded ? 'folder-tree__item-content--expanded' : ''}`}
         style={{ paddingLeft: `${level * 1.5}rem` }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         <div className="folder-tree__item-left" onClick={handleToggle}>
           <button className="folder-tree__toggle">
@@ -34,11 +34,11 @@ const FolderItem = ({ folder, level = 0 }) => {
           </div>
           <span className="folder-tree__label">{folder.name}</span>
         </div>
-        {isHovered && (
+        {/* {isHovered && ( */}
           <button className="folder-tree__add" onClick={handleAddFolder} title="Add Folder">
             <Plus size={16} strokeWidth={2.5} />
           </button>
-        )}
+        {/* )} */}
       </div>
       {isExpanded && folder.children && (
         <div className="folder-tree__children">
@@ -56,38 +56,11 @@ const FolderItem = ({ folder, level = 0 }) => {
 };
 
 const FolderTree = () => {
-  const folders = [
-    {
-      id: 1,
-      name: 'Mission_Logs',
-      children: []
-    },
-    {
-      id: 2,
-      name: 'Satellite_Data',
-      children: [
-        {
-          id: 3,
-          name: 'Raw_Telemetry',
-          children: []
-        },
-        {
-          id: 4,
-          name: 'Processed_Data',
-          children: []
-        }
-      ]
-    },
-    {
-      id: 5,
-      name: 'Open_Source_Tools',
-      children: []
-    }
-  ];
+  const files = useSelector(selectAllFolders)
 
   return (
     <div className="folder-tree">
-      {folders.map((folder) => (
+      {files.map((folder) => (
         <FolderItem key={folder.id} folder={folder} />
       ))}
     </div>

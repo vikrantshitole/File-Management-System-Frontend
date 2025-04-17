@@ -39,10 +39,10 @@ const FileListItem = ({ file, level = 0 }) => {
         {file.description}
       </td>
       <td className="file-list__cell file-list__cell--date">
-        {formatDate(file.createdAt)}
+        {formatDate(file.created_at)}
       </td>
       <td className="file-list__cell file-list__cell--date">
-        {formatDate(file.updatedAt)}
+        {formatDate(file.updated_at)}
       </td>
       <td className="file-list__cell file-list__cell--actions">
         <button className="file-list__action-button">

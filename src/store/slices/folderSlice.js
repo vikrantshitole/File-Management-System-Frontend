@@ -92,7 +92,7 @@ export const {
 } = folderSlice.actions;
 
 // Export selectors
-export const selectAllFolders = (state) => state.folders.folders;
+export const selectAllFolders = (state) => state.folder.folders;
 export const selectCurrentFolder = (state) => state.folders.selectedFolder;
 export const selectFolderById = (state, folderId) => 
   state.folders.folders.find(folder => folder.id === folderId);

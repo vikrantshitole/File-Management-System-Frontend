@@ -1,4 +1,5 @@
 @use '../../styles/variables' as *;
+@use "sass:color";
 
 .create-folder-form {
   display: flex;
@@ -61,7 +62,7 @@ input, textarea {
     border: none;
 
     &:hover {
-      background-color: darken($primary-color, 5%);
+      background-color: color.adjust($primary-color,$lightness: 5%);
     }
   }
 
