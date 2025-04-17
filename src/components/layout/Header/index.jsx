@@ -3,23 +3,19 @@ import { ChevronLeft, Filter, Plus, Upload } from 'react-feather';
 import { Vector } from '../../common/icons';
 import CreateFolderModal from '../../Modals/CreateFolderModal';
 import './Header.scss';
+import api from '../../../api/axios';
+import Breadcrumb from '../../common/Breadcrumb';
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
   const handleCreateFolder = () => {
     setIsCreateFolderModalOpen(true);
     setIsDropdownOpen(false);
@@ -32,8 +28,15 @@ const Header = () => {
 
   const handleCreateFolderSubmit = (folderData) => {
     // TODO: Implement folder creation logic
-  };
-
+    api.post('/folders/create',folderData).then((response) => {
+      console.log('Folder created successfully:', response.data);
+      setIsCreateFolderModalOpen(false);
+    }
+    ).catch((error) => {
+      console.error('Error creating folder:', error);
+    })
+    // Close the modal after creating the folder    };
+  }
   const handlePlusClick = () => {
     // If dropdown is already open, open the modal and close dropdown
     if (isDropdownOpen) {
@@ -47,23 +50,12 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="header__navigation">
-        <button className="header__back-button">
-          <ChevronLeft size={20} />
-        </button>
-        <div className="header__breadcrumb">
-          <span className="header__breadcrumb-item">NSM</span>
-          <span className="header__breadcrumb-separator">&gt;</span>
-          <span className="header__breadcrumb-item header__breadcrumb-item--active">
-            Folders & Documents
-          </span>
-        </div>
-      </div>
-      <div className="header__actions">
+      <Breadcrumb />
+         <div className="header__actions">
         <button className="header__action-button">
           <Filter size={18} />
         </button>
-        <div className="header__dropdown" ref={dropdownRef}>
+        <div className="header__dropdown" ref={dropdownRef} onMouseDown={handleClickOutside}>
           <button 
             className={`header__action-button ${isDropdownOpen ? 'header__action-button--active' : ''}`}
             onClick={handlePlusClick}

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MoreVertical } from 'react-feather';
 import { Vector, GoogleDocs } from '../../common/icons';
 import './FileList.scss';
 
-const FileListItem = ({ file }) => {
+const FileListItem = ({ file, level = 0 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-GB', {
@@ -15,14 +17,20 @@ const FileListItem = ({ file }) => {
     }).replace(',', '');
   };
 
+  const isFolder = file.children && file.children.length > 0;
+
   return (
-    <tr className="file-list__row">
-      <td className="file-list__cell file-list__cell--icon">
+    <>
+        <tr className="file-list__row">
+        <td className="file-list__cell file-list__cell--icon" style={{ paddingLeft: `${level ? level * 30: 10}px` }}>
+      <span onClick={() => isFolder && setIsExpanded(!isExpanded)} style={{ cursor: isFolder ? 'pointer' : 'default' }}>
+
         {file.type === 'folder' ? (
           <Vector size={20} />
         ) : (
           <GoogleDocs size={20} />
         )}
+      </span>
       </td>
       <td className="file-list__cell file-list__cell--name">
         {file.name}
@@ -42,6 +50,15 @@ const FileListItem = ({ file }) => {
         </button>
       </td>
     </tr>
+    
+      {isExpanded &&
+        file.children.map((child) => (
+          <FileListItem key={child.id} file={child} level={level + 1} />
+        ))}
+
+    
+    </>
+  
   );
 };
 
@@ -60,9 +77,9 @@ const FileList = ({ files }) => {
           </tr>
         </thead>
         <tbody>
-          {files.map((file) => (
-            <FileListItem key={file.id} file={file} />
-          ))}
+          {files.map((child) => (
+          <FileListItem key={child.id} file={child}/>
+        ))}
         </tbody>
       </table>
     </div>

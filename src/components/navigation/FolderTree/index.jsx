@@ -26,9 +26,9 @@ const FolderItem = ({ folder, level = 0 }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="folder-tree__item-left" onClick={handleToggle}>
-          {/* <button className="folder-tree__toggle">
+          <button className="folder-tree__toggle">
             <ChevronRight size={14} strokeWidth={2.5} />
-          </button> */}
+          </button>
           <div className="folder-tree__icon">
             <Vector size={18} />
           </div>
