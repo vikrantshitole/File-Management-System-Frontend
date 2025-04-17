@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, Filter, Plus, Upload } from 'react-feather';
 import { Vector } from '../../common/icons';
 import CreateFolderModal from '../../Modals/CreateFolderModal';
+import FiltersPopup from '../../Modals/FiltersModal/FiltersModal';
 import './Header.scss';
 import api from '../../../api/axios';
 import Breadcrumb from '../../common/Breadcrumb';
@@ -11,14 +12,17 @@ const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const dropdownRef = useRef(null);
+  const filterButtonRef = useRef(null);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
   };
+
   const handleCreateFolder = () => {
     setIsCreateFolderModalOpen(true);
     setIsDropdownOpen(false);
@@ -26,37 +30,42 @@ const Header = () => {
 
   const handleUploadDocument = () => {
     setIsUploadFileModalOpen(true);
-    // TODO: Implement upload document functionality
     setIsDropdownOpen(false);
   };
 
   const handleCreateFolderSubmit = (folderData) => {
-    // TODO: Implement folder creation logic
-    api.post('/folders/create',folderData).then((response) => {
-      console.log('Folder created successfully:', response.data);
-      setIsCreateFolderModalOpen(false);
-    }
-    ).catch((error) => {
-      console.error('Error creating folder:', error);
-    })
-    // Close the modal after creating the folder    };
-  }
+    api.post('/folders/create', folderData)
+      .then((response) => {
+        console.log('Folder created successfully:', response.data);
+        setIsCreateFolderModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error creating folder:', error);
+      });
+  };
+
   const handlePlusClick = () => {
-    // If dropdown is already open, open the modal and close dropdown
     if (isDropdownOpen) {
       setIsCreateFolderModalOpen(true);
       setIsDropdownOpen(false);
     } else {
-      // Otherwise, just open the dropdown
       setIsDropdownOpen(true);
     }
+  };
+
+  const handleFilterClick = () => {
+    setIsFiltersOpen(!isFiltersOpen);
   };
 
   return (
     <header className="header">
       <Breadcrumb />
-         <div className="header__actions">
-        <button className="header__action-button">
+      <div className="header__actions">
+        <button 
+          ref={filterButtonRef}
+          className={`header__action-button ${isFiltersOpen ? 'header__action-button--active' : ''}`}
+          onClick={handleFilterClick}
+        >
           <Filter size={18} />
         </button>
         <div className="header__dropdown" ref={dropdownRef} onMouseDown={handleClickOutside}>
@@ -90,7 +99,11 @@ const Header = () => {
         isOpen={isUploadFileModalOpen}
         onClose={() => setIsUploadFileModalOpen(false)}
       />
-    
+      <FiltersPopup
+        isOpen={isFiltersOpen}
+        onClose={() => setIsFiltersOpen(false)}
+        anchorRef={filterButtonRef}
+      />
     </header>
   );
 };

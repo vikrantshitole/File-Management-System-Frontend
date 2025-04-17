@@ -1,0 +1,187 @@
+@use '../../../styles/variables' as *;
+@use "sass:color";
+
+.filters-popup {
+  position: fixed;
+  background-color: $white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  z-index: $z-index-popover;
+  animation: popupEnter 0.2s ease;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: $font-weight-semibold;
+    color: $text-color;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__clear {
+    background: none;
+    border: none;
+    color: $error-color;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color.adjust($error-color, $lightness: -10%);
+    }
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: $text-color-secondary;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $text-color;
+    }
+  }
+
+  &__form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $text-color;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    font-size: $font-size-sm;
+    color: $text-color;
+    background-color: $white;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      border-color: color.adjust($border-color, $lightness: -10%);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px color.adjust($primary-color, $alpha: -0.9);
+    }
+
+    &::placeholder {
+      color: $text-color-secondary;
+    }
+  }
+
+  &__date-input {
+    position: relative;
+    width: 100%;
+
+    .filters-popup__calendar-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-color-secondary;
+      pointer-events: none;
+    }
+
+    .filters-popup__input {
+      padding-right: 36px;
+    }
+  }
+
+  &__footer {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid $border-color;
+  }
+
+  &__button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &--primary {
+      background-color: #2F2F69;
+      color: $white;
+      border: none;
+
+      &:hover {
+        background-color: color.adjust(#2F2F69, $lightness: -5%);
+      }
+
+      &:active {
+        background-color: color.adjust(#2F2F69, $lightness: -10%);
+      }
+    }
+
+    &--secondary {
+      background-color: $white;
+      color: $text-color;
+      border: 1px solid $border-color;
+
+      &:hover {
+        background-color: $background-color-light;
+        border-color: color.adjust($border-color, $lightness: -10%);
+      }
+
+      &:active {
+        background-color: color.adjust($background-color-light, $lightness: -2%);
+      }
+    }
+  }
+}
+
+@keyframes popupEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 
