@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, X } from 'react-feather';
+import Modal from '../Modal';
 import './UploadDocumentModal.scss';
 import api from '../../../api/axios';
 import UploadProgressModal from '../UploadProgressModal/UploadProgressModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUploadFileId, setUploadFileId } from '../../../store/slices/folderSlice';
 
-const UploadDocumentModal = ({ isOpen, onClose }) => {
+const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [progressData, setProgressData] = useState(null);
   const [error, setError] = useState(null);
@@ -52,7 +53,7 @@ const UploadDocumentModal = ({ isOpen, onClose }) => {
       setError(null);
       const postData = new FormData();
       postData.append('file', selectedFile);
-      
+      postData.append('folder_id', folderId);
       const response = await api.post('/files/upload', postData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -183,8 +184,6 @@ const UploadDocumentModal = ({ isOpen, onClose }) => {
     }
   }, [isOpen, dispatch, cleanupEventSource]);
 
-  if (!isOpen) return null;
-
   const handleClose = () => {
     cleanupEventSource();
     setProgressData(null);
@@ -194,17 +193,32 @@ const UploadDocumentModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const modalFooter = (
+    <div className="upload-modal__footer">
+      <button
+        className="upload-modal__button upload-modal__button--secondary"
+        onClick={handleClose}
+      >
+        Cancel
+      </button>
+      <button
+        className="upload-modal__button upload-modal__button--primary"
+        onClick={handleUpload}
+        disabled={!selectedFile}
+      >
+        Upload
+      </button>
+    </div>
+  );
+
   return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="upload-modal" onClick={e => e.stopPropagation()}>
-        <div className="upload-modal__header">
-          <h2 className="upload-modal__title">Upload document</h2>
-          <button className="upload-modal__close" onClick={handleClose}>
-            <X size={20} />
-          </button>
-        </div>
-        
-        {!progressData && uploadFileId === null && (
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title="Upload Document"
+      footer={modalFooter}
+    >
+      {!progressData && uploadFileId === null && (
           <div className="upload-modal__content">
             <div 
               {...getRootProps()} 
@@ -239,24 +253,7 @@ const UploadDocumentModal = ({ isOpen, onClose }) => {
             fileSize={progressData.file.size}
           />
         )}
-
-        <div className="upload-modal__footer">
-          <button 
-            className="upload-modal__button upload-modal__button--secondary" 
-            onClick={handleClose}
-          >
-            Cancel
-          </button>
-          <button 
-            className="upload-modal__button upload-modal__button--primary"
-            onClick={handleUpload}
-            disabled={!selectedFile || uploadFileId !== null || !!error}
-          >
-            Upload
-          </button>
-        </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { X } from 'react-feather';
 import './Modal.scss';
+import ReactDOM from 'react-dom'
 
 const Modal = ({ 
   isOpen, 
@@ -11,7 +12,7 @@ const Modal = ({
 }) => {
   if (!isOpen) return null;
 
-  return (
+  return (ReactDOM.createPortal(
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
@@ -29,7 +30,7 @@ const Modal = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,document.getElementById('modal-root'))
   );
 };
 
