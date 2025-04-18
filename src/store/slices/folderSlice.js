@@ -104,7 +104,7 @@ export const {
 
 // Export selectors
 export const selectAllFolders = (state) => state.folder.folders;
-export const selectCurrentFolder = (state) => state.folders.selectedFolder;
+export const selectCurrentFolder = (state) => state.folder.selectedFolder;
 export const selectFolderById = (state, folderId) => 
   state.folders.folders.find(folder => folder.id === folderId);
 export const selectFoldersByParentId = (state, parentId) => 

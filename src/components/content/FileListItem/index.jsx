@@ -5,8 +5,10 @@ import { Vector, GoogleDocs } from '../../common/icons';
 import CreateFolderModal from '../../Modals/CreateFolderModal';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 import api from '../../../api/axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentFile } from '../../../store/slices/fileSlice';
+import { setSelectedFolder, selectCurrentFolder, selectAllFolders } from '../../../store/slices/folderSlice';
+import { getParentFolderDetails, formatDate } from '../../../utils';
 
 const FileListItem = ({ file, level = 0 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,17 +17,8 @@ const FileListItem = ({ file, level = 0 }) => {
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const dispatch = useDispatch();
-  
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).replace(',', '');
-  };
+  const currentFolder = useSelector(selectCurrentFolder);
+  const folders = useSelector(selectAllFolders);
 
   const isFolder = file.children && file.children.length > 0;
 
@@ -60,6 +53,7 @@ const FileListItem = ({ file, level = 0 }) => {
       y: rect.top + 20
     };
   };
+
   const handleCreateFolderSubmit = (folderData) => {
     api.post('/folders/create', { ...folderData, parent_id: file.id })
       .then((response) => {
@@ -70,15 +64,21 @@ const FileListItem = ({ file, level = 0 }) => {
         console.error('Error creating folder:', error);
       });
   };
+  
   const handleIconClick = () => {
     if (isFolder) {
-      setIsExpanded(!isExpanded);   
-      
+      setIsExpanded(!isExpanded);
+
     }
     if (file.type === 'file') {
       dispatch(setCurrentFile(file));
-      
+
     }
+    let changeFile = file;
+    if (file.id === currentFolder?.id) {
+      changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
+    }
+    dispatch(setSelectedFolder(changeFile));
   }
 
   return (
@@ -89,7 +89,7 @@ const FileListItem = ({ file, level = 0 }) => {
           <span onClick={handleIconClick} style={{ cursor: isFolder ? 'pointer' : 'default' }}>
 
             {file.type === 'folder' ? (
-            <Vector size={20} />
+              <Vector size={20} />
             ) : (
               <GoogleDocs size={20} />
             )}
