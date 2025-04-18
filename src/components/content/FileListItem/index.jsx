@@ -5,6 +5,8 @@ import { Vector, GoogleDocs } from '../../common/icons';
 import CreateFolderModal from '../../Modals/CreateFolderModal';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 import api from '../../../api/axios';
+import { useDispatch } from 'react-redux';
+import { setCurrentFile } from '../../../store/slices/fileSlice';
 
 const FileListItem = ({ file, level = 0 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,7 +14,8 @@ const FileListItem = ({ file, level = 0 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-GB', {
@@ -67,17 +70,26 @@ const FileListItem = ({ file, level = 0 }) => {
         console.error('Error creating folder:', error);
       });
   };
-
+  const handleIconClick = () => {
+    if (isFolder) {
+      setIsExpanded(!isExpanded);   
+      
+    }
+    if (file.type === 'file') {
+      dispatch(setCurrentFile(file));
+      
+    }
+  }
 
   return (
 
     <>
       <tr className="file-list__row">
         <td className="file-list__cell file-list__cell--icon" style={{ paddingLeft: `${level ? level * 30 : 10}px` }}>
-          <span onClick={() => isFolder && setIsExpanded(!isExpanded)} style={{ cursor: isFolder ? 'pointer' : 'default' }}>
+          <span onClick={handleIconClick} style={{ cursor: isFolder ? 'pointer' : 'default' }}>
 
             {file.type === 'folder' ? (
-              <Vector size={20} />
+            <Vector size={20} />
             ) : (
               <GoogleDocs size={20} />
             )}

@@ -29,9 +29,10 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
     multiple: false,
     accept: {
       'application/pdf': ['.pdf'],
-      'application/msword': ['.doc'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'text/plain': ['.txt']
+      'text/plain': ['.txt'],
+      'image/png': ['.png'],
+      'image/jpeg': ['.jpg', '.jpeg'],
+      'image/gif': ['.gif'],
     }
   });
 
@@ -53,7 +54,9 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       setError(null);
       const postData = new FormData();
       postData.append('file', selectedFile);
-      postData.append('folder_id', folderId);
+      if (folderId) {
+        postData.append('folder_id', folderId);
+      }
       const response = await api.post('/files/upload', postData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -91,6 +94,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       setProgressData(null);
       setSelectedFile(null);
       dispatch(setUploadFileId(null));
+      dispatch(setRefreshData(true));
       sessionStorage.removeItem('uploadFileId');
     }, 1000);
   }, [cleanupEventSource, dispatch]);

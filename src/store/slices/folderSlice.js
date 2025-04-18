@@ -2,30 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // Initial state
 const initialState = {
-  folders: [
-    {
-      id: '1',
-      name: 'Mission_Logs',
-      path: '/Mission_Logs',
-      children: [
-        {
-          id: '2',
-          name: 'Raw_Telemetry',
-          path: '/Mission_Logs/Raw_Telemetry',
-          children: []
-        },
-        {
-          id: '3',
-          name: 'Processed_Data',
-          path: '/Mission_Logs/Processed_Data',
-          children: []
-        }
-      ]
-    }
-  ],
+  folders: [],
   selectedFolder: null,
   currentPath: '/',
-  uploadFileId: null
+  uploadFileId: null,
+  refreshData: true,
+  folderCount: 0,
+  fileCount: 0
 };
 
 // Create the slice
@@ -77,11 +60,17 @@ const folderSlice = createSlice({
       removeFromFolders(state.folders);
     },
     setFolders(state, action) {
-      const { folders } = action.payload;
+      const { folders ,counts} = action.payload;
       state.folders = folders;
+      state.refreshData = false;
+      state.folderCount = counts.total_folders;
+      state.fileCount = counts.total_files;
     },
     setUploadFileId: (state, action) => {
       state.uploadFileId = action.payload;
+    },
+    setRefreshData: (state, action) => {
+      state.refreshData = action.payload;
     }
   },
 });
@@ -93,7 +82,8 @@ export const {
   addFolder,
   removeFolder,
   setFolders,
-  setUploadFileId
+  setUploadFileId,
+  setRefreshData
 } = folderSlice.actions;
 
 // Export selectors
@@ -105,5 +95,8 @@ export const selectFoldersByParentId = (state, parentId) =>
   state.folders.folders.filter(folder => folder.parentId === parentId);
 export const selectCurrentPath = (state) => state.folders.currentPath;
 export const selectUploadFileId = (state) => state.folder.uploadFileId;
+export const selectRefreshData = (state) => state.folder.refreshData;
+export const selectFolderCount = (state) => state.folder.folderCount;
+export const selectFileCount = (state) => state.folder.fileCount;
 // Export reducer
 export default folderSlice.reducer; 
