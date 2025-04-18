@@ -4,20 +4,25 @@ import './MainContent.scss';
 import { useSelector } from 'react-redux';
 import api from '../../../api/axios';
 import { useDispatch } from 'react-redux';
-import { selectAllFolders, selectRefreshData, setFolders } from '../../../store/slices/folderSlice';
+import { selectAllFolders, selectRefreshData, setFolders, selectCurrentPage, selectTotalPages, selectTotalItems, selectItemsPerPage, changeCurrentPage } from '../../../store/slices/folderSlice';
+import Pagination from '../../common/Pagination';
 const MainContent = () => {
   // Mock data - replace with actual data from your application
   const files = useSelector(selectAllFolders)
   const refreshData = useSelector(selectRefreshData);
+  const currentPage = useSelector(selectCurrentPage);
+  const totalPages = useSelector(selectTotalPages);
+  const totalItems = useSelector(selectTotalItems);
+  const itemsPerPage = useSelector(selectItemsPerPage); 
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/folders?page=1&limit=10');
-        const {data, counts} =response.data
-        console.log(counts );
+        const query = `page=${currentPage}&limit=${itemsPerPage}`;
+        const response = await api.get(`/folders?${query}`);
+        const {data, counts, pagination} =response.data
                 
-        dispatch(setFolders({ folders: data,counts }));
+        dispatch(setFolders({ folders: data,counts, pagination }));
       } 
       catch (error) {
         console.error('Error fetching folder hierarchy:', error);
@@ -26,10 +31,19 @@ const MainContent = () => {
     };
 
     fetchData();
-  }, [refreshData]);
+  }, [refreshData,currentPage]);
+  const handlePageChange = (page) => {
+    dispatch(changeCurrentPage(page));
+  }
   return (
     <main className="main-content">
       <FileList files={files} />
+
+      <Pagination 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </main>
   );
 };

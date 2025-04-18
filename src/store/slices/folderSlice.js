@@ -8,7 +8,13 @@ const initialState = {
   uploadFileId: null,
   refreshData: true,
   folderCount: 0,
-  fileCount: 0
+  fileCount: 0,
+  pagination : {
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10
+  }
 };
 
 // Create the slice
@@ -60,17 +66,26 @@ const folderSlice = createSlice({
       removeFromFolders(state.folders);
     },
     setFolders(state, action) {
-      const { folders ,counts} = action.payload;
+      const { folders ,counts,pagination} = action.payload;
       state.folders = folders;
       state.refreshData = false;
       state.folderCount = counts.total_folders;
       state.fileCount = counts.total_files;
+      state.pagination = {
+        currentPage: pagination.page,
+        totalPages: pagination.totalPages,
+        totalItems: pagination.total,
+        itemsPerPage: pagination.limit
+      }
     },
     setUploadFileId: (state, action) => {
       state.uploadFileId = action.payload;
     },
     setRefreshData: (state, action) => {
       state.refreshData = action.payload;
+    },
+    changeCurrentPage: (state, action) => {
+      state.pagination.currentPage = action.payload;
     }
   },
 });
@@ -83,7 +98,8 @@ export const {
   removeFolder,
   setFolders,
   setUploadFileId,
-  setRefreshData
+  setRefreshData,
+  changeCurrentPage
 } = folderSlice.actions;
 
 // Export selectors
@@ -98,5 +114,9 @@ export const selectUploadFileId = (state) => state.folder.uploadFileId;
 export const selectRefreshData = (state) => state.folder.refreshData;
 export const selectFolderCount = (state) => state.folder.folderCount;
 export const selectFileCount = (state) => state.folder.fileCount;
-// Export reducer
+export const selectCurrentPage = (state) => state.folder.pagination.currentPage;
+export const selectTotalPages = (state) => state.folder.pagination.totalPages;
+export const selectTotalItems = (state) => state.folder.pagination.totalItems;
+export const selectItemsPerPage = (state) => state.folder.pagination.itemsPerPage;
+  // Export reducer
 export default folderSlice.reducer; 

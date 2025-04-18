@@ -1,3 +1,6 @@
+@use 'sass:color';
+@import '../../../styles/variables.scss';
+
 .pagination {
   display: flex;
   align-items: center;
@@ -13,22 +16,22 @@
     min-width: 2rem;
     height: 2rem;
     padding: 0 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    background-color: var(--background-color);
+    border: 1px solid $border-color;
+    border-radius: $border-radius-sm;
+    background-color: $background-color;
     color: var(--text-color);
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover:not(&--disabled) {
-      background-color: var(--background-hover);
-      border-color: var(--primary-color);
+      background-color: color.adjust($background-color, $lightness: -10%);
+      border-color: $primary-color;
     }
 
     &--active {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
+      background-color: $primary-color;
+      border-color: $primary-color;
       color: white;
     }
 
