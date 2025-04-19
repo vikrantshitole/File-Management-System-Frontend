@@ -1,6 +1,4 @@
 export const getParentFolderDetails = (folders, folder, target) => {
-    console.log(folders, folder, target);
-
     for (let child of folders) {
         if (child.id === target[0] && child.type === 'folder') {
             if (child.id === folder.parent_id) {
@@ -11,7 +9,7 @@ export const getParentFolderDetails = (folders, folder, target) => {
         }
     }
 }
-const getbreadcrumb = (folders, target) => {
+export const getbreadcrumb = (folders, target) => {
     const breadcrumb = [];
     for (let folder of folders) {
         if (folder.id === target[0] && folder.type === 'folder') {
@@ -31,3 +29,16 @@ export const formatDate = (dateString) => {
       minute: '2-digit'
     }).replace(',', '');
   };
+export const getCurrentFolderExpanded = (folders,folder, target) => {
+    let newFolders = []
+    for (let child of folders) {
+        if (child.id === folder.id) {
+            newFolders.push({...child, expanded: !folder.expanded, children: getCurrentFolderExpanded(child.children,folder, target.slice(1))})
+        }else if (child.id === target[0] && child.type === 'folder') {
+            newFolders.push({...child, expanded: true, children: getCurrentFolderExpanded(child.children,folder, target.slice(1))})
+        }else {
+            newFolders.push({...child, expanded: false, children: getCurrentFolderExpanded(child.children,folder, target.slice(1))})
+        }
+    }
+    return newFolders
+}

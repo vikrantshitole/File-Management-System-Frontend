@@ -66,14 +66,14 @@ const Header = () => {
           className={`header__action-button ${isFiltersOpen ? 'header__action-button--active' : ''}`}
           onClick={handleFilterClick}
         >
-          <Filter size={18} />
+          <Filter size={18} color={'#ffffff'} fill='#ffffff' />
         </button>
         <div className="header__dropdown" ref={dropdownRef} onMouseDown={handleClickOutside}>
           <button 
             className={`header__action-button ${isDropdownOpen ? 'header__action-button--active' : ''}`}
             onClick={handlePlusClick}
           >
-            <Plus size={18} />
+            <Plus size={18} color={'#ffffff'} fill='#ffffff' fontSize={18}/>
           </button>
           {isDropdownOpen && (
             <div className="header__dropdown-menu">

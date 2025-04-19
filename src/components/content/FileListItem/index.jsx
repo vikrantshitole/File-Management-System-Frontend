@@ -7,13 +7,13 @@ import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocument
 import api from '../../../api/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentFile } from '../../../store/slices/fileSlice';
-import { setSelectedFolder, selectCurrentFolder, selectAllFolders } from '../../../store/slices/folderSlice';
+import { setSelectedFolder, selectCurrentFolder, selectAllFolders, setCurrentFolderExpanded } from '../../../store/slices/folderSlice';
 import { getParentFolderDetails, formatDate } from '../../../utils';
 
 const FileListItem = ({ file, level = 0 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const moreButtonRef = useRef(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const dispatch = useDispatch();
@@ -67,8 +67,8 @@ const FileListItem = ({ file, level = 0 }) => {
   
   const handleIconClick = () => {
     if (isFolder) {
-      setIsExpanded(!isExpanded);
-
+      // setIsExpanded(!isExpanded);
+      dispatch(setCurrentFolderExpanded(file));
     }
     if (file.type === 'file') {
       dispatch(setCurrentFile(file));
@@ -125,7 +125,7 @@ const FileListItem = ({ file, level = 0 }) => {
         </td>
       </tr>
 
-      {isExpanded &&
+      {file.expanded &&
         file.children.map((child) => (
           <FileListItem key={child.id} file={child} level={level + 1} />
         ))}

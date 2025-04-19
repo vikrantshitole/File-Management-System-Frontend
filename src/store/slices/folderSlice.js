@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getCurrentFolderExpanded } from '../../utils';
 
 // Initial state
 const initialState = {
@@ -86,6 +87,12 @@ const folderSlice = createSlice({
     },
     changeCurrentPage: (state, action) => {
       state.pagination.currentPage = action.payload;
+    },
+    setCurrentFolderExpanded: (state, action) => {
+      const folders = getCurrentFolderExpanded(state.folders, action.payload, action.payload.path.split(',').map(Number));
+      console.log(folders);
+      
+      state.folders = folders;
     }
   },
 });
@@ -99,7 +106,8 @@ export const {
   setFolders,
   setUploadFileId,
   setRefreshData,
-  changeCurrentPage
+  changeCurrentPage,
+  setCurrentFolderExpanded
 } = folderSlice.actions;
 
 // Export selectors
