@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentFile } from '../../../store/slices/fileSlice';
 import { setSelectedFolder, selectCurrentFolder, selectAllFolders, setCurrentFolderExpanded, setRefreshData } from '../../../store/slices/folderSlice';
 import { getParentFolderDetails, formatDate } from '../../../utils';
+import DeleteConfirmationModal from '../../Modals/DeleteConfirmationModal/DeleteConfirmationModal';
 
 const FileListItem = ({ file, level = 0 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,11 +17,12 @@ const FileListItem = ({ file, level = 0 }) => {
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen]  = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
+  const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
   const dispatch = useDispatch();
   const currentFolder = useSelector(selectCurrentFolder);
   const folders = useSelector(selectAllFolders);
 
-  const isFolder = file.children && file.children.length > 0;
+  const isFolder = file.type === 'folder';
 
   const handleMoreClick = () => {
     setIsMenuOpen(true);
@@ -33,6 +35,8 @@ const FileListItem = ({ file, level = 0 }) => {
 
   const handleDelete = () => {
     setIsMenuOpen(false);
+    setIsDeleteConfirmationModalOpen(true);
+
   };
 
   const handleCreateFolder = () => {
@@ -92,6 +96,17 @@ const FileListItem = ({ file, level = 0 }) => {
     dispatch(setSelectedFolder(changeFile));
   }
 
+  const handleDeleteConfirmation = () => {
+    api.delete(`/${file.type}s/` + file.id)
+      .then((response) => {
+        dispatch(setRefreshData(true));
+        setIsDeleteConfirmationModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error deleting file:', error);
+      });
+  }
+
   return (
 
     <>
@@ -148,8 +163,11 @@ const FileListItem = ({ file, level = 0 }) => {
         ))}
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen || isUpdateFolder}
-        folder={file}
-        onClose={() => setIsCreateFolderModalOpen(false)}
+        folder={isUpdateFolder ? file : null}
+        onClose={() => {
+          setIsCreateFolderModalOpen(false);
+          setIsUpdateFolder(false);
+        }}
         onCreateFolder={handleCreateFolderSubmit}
       />
       <UploadDocumentModal
@@ -157,7 +175,14 @@ const FileListItem = ({ file, level = 0 }) => {
         folderId={file.id}
         onClose={() => setIsUploadFileModalOpen(false)}
       />
-
+  
+        <DeleteConfirmationModal
+          isOpen={isDeleteConfirmationModalOpen}
+          onClose={() => setIsDeleteConfirmationModalOpen(false)}
+          onConfirm={handleDeleteConfirmation}
+          itemName={file.name}
+          itemType={file.type}
+        />
 
     </>
   );
