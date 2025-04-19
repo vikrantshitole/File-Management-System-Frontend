@@ -110,21 +110,7 @@
   }
 
   &__date-input {
-    position: relative;
     width: 100%;
-
-    .filters-popup__calendar-icon {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: $text-color-secondary;
-      pointer-events: none;
-    }
-
-    .filters-popup__input {
-      padding-right: 36px;
-    }
   }
 
   &__footer {

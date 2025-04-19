@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, X } from 'react-feather';
 import './FiltersModal.scss';
 
-const FiltersPopup = ({ isOpen, onClose, anchorRef }) => {
+const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -12,6 +12,8 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -24,11 +26,16 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef }) => {
       description: '',
       date: ''
     });
+    setFilterData({
+      name: '',
+      description: '',
+      date: ''
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement filter logic
+    setFilterData(formData);
     onClose();
   };
 
@@ -111,14 +118,14 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef }) => {
           <div className="filters-popup__date-input">
             <input
               id="date"
-              type="text"
+              type="date"
               name="date"
               value={formData.date}
               onChange={handleInputChange}
               placeholder="DD-MM-YYYY"
               className="filters-popup__input"
             />
-            <Calendar size={18} className="filters-popup__calendar-icon" />
+            {/* <Calendar size={18} className="filters-popup__calendar-icon" /> */}
           </div>
         </div>
 

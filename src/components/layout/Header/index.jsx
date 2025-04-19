@@ -10,7 +10,7 @@ import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocument
 import { useDispatch } from 'react-redux';
 import { setRefreshData } from '../../../store/slices/folderSlice';
 
-const Header = () => {
+const Header = ({setFilterData}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
@@ -106,6 +106,7 @@ const Header = () => {
         isOpen={isFiltersOpen}
         onClose={() => setIsFiltersOpen(false)}
         anchorRef={filterButtonRef}
+        setFilterData={setFilterData}
       />
     </header>
   );

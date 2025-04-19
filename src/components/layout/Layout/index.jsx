@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LeftPanel from '../../navigation/LeftPanel';
 import Sidebar from '../../navigation/Sidebar';
 import MainContent from '../MainContent';
@@ -10,16 +10,17 @@ import { useSelector } from 'react-redux';
 
 const Layout = () => {
     const file = useSelector(selectCurrentFile);
+    const [filterData, setFilterData] = useState({name: '', description: '', date: ''});
   return (
     <div className="layout">
       <LeftPanel />
       <div className="layout__container">
         <Sidebar />
         <div className="layout__main" style={{width: file ? '80%' : '100%'}}>
-          <Header />
+          <Header setFilterData={setFilterData}/>
           <div className="layout__main-content">
 
-          <MainContent />
+          <MainContent filterData={filterData} />
           <FileViewer />
           </div>
         </div>
