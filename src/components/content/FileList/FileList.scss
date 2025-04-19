@@ -63,6 +63,19 @@
     &--icon {
       width: 48px;
       padding-right: 0;
+        position: relative;
+          
+      .badge {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background-color: $background-color-badge;
+        border-radius: $border-radius-lg;
+        padding: 0 5px;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
+        color: $text-color;
+      }
     }
 
     &--name {

@@ -89,7 +89,12 @@ const FileListItem = ({ file, level = 0 }) => {
           <span onClick={handleIconClick} style={{ cursor: isFolder ? 'pointer' : 'default' }}>
 
             {file.type === 'folder' ? (
-              <Vector size={20} />
+              <>
+                <span className="badge">
+                  {file.subfolder_count}
+                </span>
+                <Vector size={20} />
+              </>
             ) : (
               <GoogleDocs size={20} />
             )}
