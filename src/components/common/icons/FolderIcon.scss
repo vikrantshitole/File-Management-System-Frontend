@@ -1,0 +1,13 @@
+.folder-icon {
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+  &--large {
+    width: 32px;
+    height: 40px;
+  }
+} 

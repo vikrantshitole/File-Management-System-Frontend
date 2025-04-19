@@ -7,7 +7,7 @@ import { getbreadcrumb } from '../../../utils';
 const Breadcrumb = () => {
   const folders = useSelector(selectAllFolders);
   const currentFolder = useSelector(selectCurrentFolder);
-  let currentFolderPath = currentFolder ? currentFolder.path.split(',').map(Number) : [];
+  let currentFolderPath = currentFolder && currentFolder.type === 'folder'   ? currentFolder.path.split(',').map(Number) : [];
   const breadcrumb = getbreadcrumb(folders, currentFolderPath);
   return (<div className="header__navigation">
     <button className="header__back-button">
@@ -15,7 +15,7 @@ const Breadcrumb = () => {
     </button>
     <div className="header__breadcrumb">
       {breadcrumb.map((item, index) => (
-        item.id !== currentFolder.id ? <Fragment key={item.id}>
+        item.id !== currentFolder?.id ? <Fragment key={item.id}>
           <span className="header__breadcrumb-item">
             {item.name}
           </span>
