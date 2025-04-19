@@ -17,15 +17,15 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
   const handleToggle = (e) => {
     e.stopPropagation();
     if (folder.type === 'folder') {
-      // setIsExpanded(!isExpanded);
+
       dispatch(setCurrentFolderExpanded(folder));
     }
     if (folder.type === 'file') {
       dispatch(setCurrentFile(folder));
 
     }
-    let changeFile = file;
-    if (folder.id === currentFolder?.id) {
+    let changeFile = folder;
+    if (folder.id === currentFolder?.id || folder.expanded) {
       changeFile = getParentFolderDetails(folders, folder, folder.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));
@@ -56,8 +56,9 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
       <div
         className={`folder-tree__item-content ${folder.expanded ? 'folder-tree__item-content--expanded' : ''}`}
         style={{ paddingLeft: `${level * 1.5}rem` }}
+        onClick={handleToggle}
       >
-        <div className="folder-tree__item-left" onClick={handleToggle}>
+        <div className="folder-tree__item-left" >
           <button className="folder-tree__toggle">
             <ChevronRight size={14} strokeWidth={2.5} />
           </button>

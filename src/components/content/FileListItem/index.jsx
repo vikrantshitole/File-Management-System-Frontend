@@ -13,8 +13,8 @@ import { getParentFolderDetails, formatDate } from '../../../utils';
 const FileListItem = ({ file, level = 0 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const moreButtonRef = useRef(null);
-  // const [isExpanded, setIsExpanded] = useState(false);
-  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
+  const [isUpdateFolder, setIsUpdateFolder] = useState(false);
+  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen]  = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const dispatch = useDispatch();
   const currentFolder = useSelector(selectCurrentFolder);
@@ -27,6 +27,7 @@ const FileListItem = ({ file, level = 0 }) => {
   };
 
   const handleEdit = () => {
+    setIsUpdateFolder(true);
     setIsMenuOpen(false);
   };
 
@@ -55,19 +56,29 @@ const FileListItem = ({ file, level = 0 }) => {
   };
 
   const handleCreateFolderSubmit = (folderData) => {
-    api.post('/folders/create', { ...folderData, parent_id: file.id })
+    let apiUrl = '/folders/create';
+    let apiMethod = 'post';
+    let postData = { ...folderData, parent_id: file.id };
+    if (isUpdateFolder) {
+      apiUrl = '/folders/update/' + file.id;
+      apiMethod = 'put';
+      postData = { ...folderData, id: file.id ,parent_id: file.parent_id};
+    }
+    api[apiMethod](apiUrl, postData)
       .then((response) => {
-        setIsCreateFolderModalOpen(false);
         dispatch(setRefreshData(true));
       })
       .catch((error) => {
         console.error('Error creating folder:', error);
+      })
+      .finally(() => {
+        setIsCreateFolderModalOpen(false);
+        setIsUpdateFolder(false);
       });
   };
   
   const handleIconClick = () => {
     if (isFolder) {
-      // setIsExpanded(!isExpanded);
       dispatch(setCurrentFolderExpanded(file));
     }
     if (file.type === 'file') {
@@ -75,7 +86,7 @@ const FileListItem = ({ file, level = 0 }) => {
 
     }
     let changeFile = file;
-    if (file.id === currentFolder?.id) {
+    if (file.id === currentFolder?.id || file.expanded) {
       changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));
@@ -84,9 +95,9 @@ const FileListItem = ({ file, level = 0 }) => {
   return (
 
     <>
-      <tr className="file-list__row">
+      <tr className="file-list__row" onClick={handleIconClick}>
         <td className="file-list__cell file-list__cell--icon" style={{ paddingLeft: `${level ? level * 30 : 10}px` }}>
-          <span onClick={handleIconClick} style={{ cursor: isFolder ? 'pointer' : 'default' }}>
+          <span style={{ cursor: isFolder ? 'pointer' : 'default' }}>
 
             {file.type === 'folder' ? (
               <>
@@ -120,6 +131,7 @@ const FileListItem = ({ file, level = 0 }) => {
 
           <FolderOptionsMenu
             isOpen={isMenuOpen}
+            isFolder={isFolder}
             onClose={() => setIsMenuOpen(false)}
             position={getMenuPosition()}
             onEdit={handleEdit}
@@ -135,7 +147,8 @@ const FileListItem = ({ file, level = 0 }) => {
           <FileListItem key={child.type === 'folder' ? child.id : child.id+child.file_path} file={child} level={level + 1} />
         ))}
       <CreateFolderModal
-        isOpen={isCreateFolderModalOpen}
+        isOpen={isCreateFolderModalOpen || isUpdateFolder}
+        folder={file}
         onClose={() => setIsCreateFolderModalOpen(false)}
         onCreateFolder={handleCreateFolderSubmit}
       />

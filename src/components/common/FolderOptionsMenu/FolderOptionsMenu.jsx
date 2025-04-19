@@ -9,7 +9,8 @@ const FolderOptionsMenu = ({
   onEdit,
   onDelete,
   onCreateFolder,
-  onUploadDocument
+  onUploadDocument,
+  isFolder
 }) => {
   const menuRef = useRef(null);
 
@@ -61,6 +62,7 @@ const FolderOptionsMenu = ({
       <button 
         className="folder-options-menu__item"
         onClick={onCreateFolder}
+        disabled={!isFolder}
       >
         <FolderPlusIcon size={18} />
         <span>Create Folder</span>
@@ -69,6 +71,7 @@ const FolderOptionsMenu = ({
       <button 
         className="folder-options-menu__item"
         onClick={onUploadDocument}
+        disabled={!isFolder}
       >
         <FileUploadIcon size={18} />
         <span>Upload Document</span>

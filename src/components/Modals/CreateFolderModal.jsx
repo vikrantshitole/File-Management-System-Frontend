@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Modal from './Modal';
 import './CreateFolderModal.scss';
 
-const CreateFolderModal = ({ isOpen, onClose, onCreateFolder }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+const CreateFolderModal = ({ isOpen, onClose, onCreateFolder, folder }) => {
+  const [name, setName] = useState(folder?.name || '');
+  const [description, setDescription] = useState(folder?.description || '');
   const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {
@@ -61,7 +61,7 @@ const CreateFolderModal = ({ isOpen, onClose, onCreateFolder }) => {
         className="btn btn-primary" 
         onClick={handleSubmit}
       >
-        Create
+        {folder ? 'Update' : 'Create'}
       </button>
     </>
   );
@@ -70,7 +70,7 @@ const CreateFolderModal = ({ isOpen, onClose, onCreateFolder }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Create Folder"
+      title={folder ? 'Update Folder' : 'Create Folder'}
       footer={modalFooter}
     >
       <form className="create-folder-form" onSubmit={handleSubmit}>
@@ -93,7 +93,7 @@ const CreateFolderModal = ({ isOpen, onClose, onCreateFolder }) => {
             id="folder-description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter folder description (optional)"
+            placeholder="Enter folder description"
             rows={3}
           />
           {errors.description && <div className="error-message">{errors.description}</div>}
