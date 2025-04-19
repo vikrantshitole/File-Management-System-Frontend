@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Edit2, Trash2, FolderPlus, Upload } from 'react-feather';
 import './FolderOptionsMenu.scss';
+import { FileUploadIcon, FolderPlusIcon, PencilIcon, TrashIcon } from '../icons';
 
 const FolderOptionsMenu = ({ 
   isOpen, 
@@ -46,7 +46,7 @@ const FolderOptionsMenu = ({
         className="folder-options-menu__item"
         onClick={onEdit}
       >
-        <Edit2 size={18} />
+        <PencilIcon size={18} />
         <span>Edit</span>
       </button>
 
@@ -54,7 +54,7 @@ const FolderOptionsMenu = ({
         className="folder-options-menu__item"
         onClick={onDelete}
       >
-        <Trash2 size={18} />
+        <TrashIcon size={18} />
         <span>Delete</span>
       </button>
 
@@ -62,7 +62,7 @@ const FolderOptionsMenu = ({
         className="folder-options-menu__item"
         onClick={onCreateFolder}
       >
-        <FolderPlus size={18} />
+        <FolderPlusIcon size={18} />
         <span>Create Folder</span>
       </button>
 
@@ -70,7 +70,7 @@ const FolderOptionsMenu = ({
         className="folder-options-menu__item"
         onClick={onUploadDocument}
       >
-        <Upload size={18} />
+        <FileUploadIcon size={18} />
         <span>Upload Document</span>
       </button>
     </div>
