@@ -90,7 +90,7 @@ const FileListItem = ({ file, level = 0 }) => {
 
             {file.type === 'folder' ? (
               <>
-                <span className="badge" style={{ left:`${level?level*25:5}px` }}>
+                <span className="badge" style={{ left:`${level?level*28 - file.level:5}px` }}>
                   {file.subfolder_count} 
                 </span>
                 <Vector size={20} />

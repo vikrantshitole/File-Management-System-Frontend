@@ -64,9 +64,6 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       });
 
       if (response.data?.uploadId) {
-        console.log(
-          'response.data.uploadId',
-        );
         sessionStorage.setItem('uploadFileId', response.data.uploadId);
         dispatch(setUploadFileId(response.data.uploadId));
       } else {
@@ -77,9 +74,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       setError('Failed to start upload. Please try again.');
       cleanupEventSource();
       setProgressData(null);
-      setSelectedFile(null);
-      console.log('error in handleUpload setUploadFileId(null)' );
-      
+      setSelectedFile(null);      
       dispatch(setUploadFileId(null));
     }
   };
@@ -166,7 +161,6 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
   }, [cleanupEventSource, dispatch, handleCompletion]);
 
   useEffect(() => {
-    console.log('uploadFileId', uploadFileId);
     if (uploadFileId) {
       initializeEventSource(uploadFileId);
     }
@@ -214,7 +208,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       </button>
     </div>
   );
-
+  const { progress, status } = progressData || {};
   return (
     <Modal
       isOpen={isOpen}
@@ -249,14 +243,13 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
             )}
           </div>
         )}
-
-        {(uploadFileId && progressData && progressData.status == 'uploading') && (
+        {uploadFileId && status == 'uploading' && 
           <UploadProgressModal 
-            progress={progressData.progress} 
+            progress={progress} 
             fileName={progressData.file.originalname} 
             fileSize={progressData.file.size}
           />
-        )}
+        }
     </Modal>
   );
 };
