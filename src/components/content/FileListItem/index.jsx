@@ -7,7 +7,7 @@ import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocument
 import api from '../../../api/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentFile } from '../../../store/slices/fileSlice';
-import { setSelectedFolder, selectCurrentFolder, selectAllFolders, setCurrentFolderExpanded } from '../../../store/slices/folderSlice';
+import { setSelectedFolder, selectCurrentFolder, selectAllFolders, setCurrentFolderExpanded, setRefreshData } from '../../../store/slices/folderSlice';
 import { getParentFolderDetails, formatDate } from '../../../utils';
 
 const FileListItem = ({ file, level = 0 }) => {
@@ -57,8 +57,8 @@ const FileListItem = ({ file, level = 0 }) => {
   const handleCreateFolderSubmit = (folderData) => {
     api.post('/folders/create', { ...folderData, parent_id: file.id })
       .then((response) => {
-        console.log('Folder created successfully:', response.data);
         setIsCreateFolderModalOpen(false);
+        dispatch(setRefreshData(true));
       })
       .catch((error) => {
         console.error('Error creating folder:', error);
@@ -127,7 +127,7 @@ const FileListItem = ({ file, level = 0 }) => {
 
       {file.expanded &&
         file.children.map((child) => (
-          <FileListItem key={child.id} file={child} level={level + 1} />
+          <FileListItem key={child.type === 'folder' ? child.id : child.id+child.file_path} file={child} level={level + 1} />
         ))}
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen}

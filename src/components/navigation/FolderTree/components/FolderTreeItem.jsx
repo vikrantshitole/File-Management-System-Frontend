@@ -4,7 +4,7 @@ import api from '../../../../api/axios';
 import { ChevronRight, Plus } from 'react-feather';
 import { GoogleDocs, Vector } from '../../../common/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAllFolders, selectCurrentFolder, setCurrentFolderExpanded, setSelectedFolder } from '../../../../store/slices/folderSlice';
+import { selectAllFolders, selectCurrentFolder, setCurrentFolderExpanded, setRefreshData, setSelectedFolder } from '../../../../store/slices/folderSlice';
 import { getParentFolderDetails } from '../../../../utils';
 import { setCurrentFile } from '../../../../store/slices/fileSlice';
 
@@ -44,8 +44,8 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
       }
     )
       .then((response) => {
-        console.log('Folder created successfully:', response.data);
         setIsCreateFolderModalOpen(false);
+        dispatch(setRefreshData(true));
       })
       .catch((error) => {
         console.error('Error creating folder:', error);
@@ -80,7 +80,7 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
         <div className="folder-tree__children">
           {folder.children.map((child) => (
             <FolderTreeItem
-              key={child.id}
+              key={child.type === 'folder' ? child.id : child.id+child.file_path}
               folder={child}
               level={level + 1}
             />

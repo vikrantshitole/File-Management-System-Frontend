@@ -12,7 +12,7 @@ const FolderTree = () => {
   return (
     <div className="folder-tree">
       {files.map((folder) => (
-        <FolderTreeItem key={folder.id} folder={folder} />
+        <FolderTreeItem key={folder.type === 'folder' ? folder.id : folder.id+folder.file_path} folder={folder} />
       ))}
     </div>
   );

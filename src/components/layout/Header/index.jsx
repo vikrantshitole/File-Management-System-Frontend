@@ -7,12 +7,15 @@ import './Header.scss';
 import api from '../../../api/axios';
 import Breadcrumb from '../../common/Breadcrumb';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
+import { useDispatch } from 'react-redux';
+import { setRefreshData } from '../../../store/slices/folderSlice';
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const dropdownRef = useRef(null);
   const filterButtonRef = useRef(null);
@@ -36,8 +39,8 @@ const Header = () => {
   const handleCreateFolderSubmit = (folderData) => {
     api.post('/folders/create', folderData)
       .then((response) => {
-        console.log('Folder created successfully:', response.data);
         setIsCreateFolderModalOpen(false);
+        dispatch(setRefreshData(true));
       })
       .catch((error) => {
         console.error('Error creating folder:', error);

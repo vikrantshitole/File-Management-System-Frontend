@@ -6,7 +6,7 @@ import './UploadDocumentModal.scss';
 import api from '../../../api/axios';
 import UploadProgressModal from '../UploadProgressModal/UploadProgressModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUploadFileId, setUploadFileId } from '../../../store/slices/folderSlice';
+import { selectUploadFileId, setRefreshData, setUploadFileId } from '../../../store/slices/folderSlice';
 
 const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
   const [selectedFile, setSelectedFile] = useState(null);

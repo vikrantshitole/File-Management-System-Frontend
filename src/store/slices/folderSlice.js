@@ -89,9 +89,7 @@ const folderSlice = createSlice({
       state.pagination.currentPage = action.payload;
     },
     setCurrentFolderExpanded: (state, action) => {
-      const folders = getCurrentFolderExpanded(state.folders, action.payload, action.payload.path.split(',').map(Number));
-      console.log(folders);
-      
+      const folders = getCurrentFolderExpanded(state.folders, action.payload, action.payload.path.split(',').map(Number));      
       state.folders = folders;
     }
   },

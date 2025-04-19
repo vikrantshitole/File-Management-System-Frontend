@@ -19,7 +19,7 @@ const FileList = ({ files }) => {
         </thead>
         <tbody>
           {files.map((child) => (
-          <FileListItem key={child.id} file={child}/>
+          <FileListItem key={child.type === 'folder' ? child.id : child.id+child.file_path} file={child}/>
         ))}
         </tbody>
       </table>
