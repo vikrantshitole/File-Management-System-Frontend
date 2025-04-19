@@ -24,7 +24,8 @@ const FileListItem = ({ file, level = 0 }) => {
 
   const isFolder = file.type === 'folder';
 
-  const handleMoreClick = () => {
+  const handleMoreClick = (e) => {
+    e.stopPropagation();
     setIsMenuOpen(true);
   };
 
