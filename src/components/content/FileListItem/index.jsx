@@ -2,11 +2,9 @@ import React, { useState, useRef } from 'react';
 import { MoreVertical } from 'react-feather';
 import FolderOptionsMenu from '../../common/FolderOptionsMenu/FolderOptionsMenu';
 import { Vector, GoogleDocs } from '../../common/icons';
-import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
-import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 import api from '../../../api/axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentFile } from '../../../store/slices/fileSlice';
+import { selectCurrentFile, setCurrentFile } from '../../../store/slices/fileSlice';
 import {
   setSelectedFolder,
   selectCurrentFolder,
@@ -24,7 +22,7 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
   const dispatch = useDispatch();
   const currentFolder = useSelector(selectCurrentFolder);
   const folders = useSelector(selectAllFolders);
-
+  const currentFile = useSelector(selectCurrentFile);
   const isFolder = file.type === 'folder';
 
   const handleMoreClick = e => {
@@ -67,25 +65,14 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
       dispatch(setCurrentFolderExpanded(file));
     }
     if (file.type === 'file') {
-      dispatch(setCurrentFile(file));
+      const newFile = file.id === currentFile?.id ? null : file;
+      dispatch(setCurrentFile(newFile));
     }
     let changeFile = file;
     if ((file.id === currentFolder?.id || file.expanded) && file.type === 'folder') {
       changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));
-  };
-
-  const handleDeleteConfirmation = () => {
-    api
-      .delete(`/${file.type}s/` + file.id)
-      .then(response => {
-        dispatch(setRefreshData(true));
-        setIsDeleteConfirmationModalOpen(false);
-      })
-      .catch(error => {
-        console.error('Error deleting file:', error);
-      });
   };
 
   return (
@@ -152,9 +139,9 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
       <DeleteConfirmationModal
         isOpen={isDeleteConfirmationModalOpen}
         onClose={() => setIsDeleteConfirmationModalOpen(false)}
-        onConfirm={handleDeleteConfirmation}
         itemName={file.name}
         itemType={file.type}
+        itemId={file.id}
       />
     </>
   );

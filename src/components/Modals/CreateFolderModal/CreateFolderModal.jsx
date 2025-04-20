@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../Modal';
 import './CreateFolderModal.scss';
+import { useDispatch } from 'react-redux';
+import { setRefreshData } from '../../../store/slices/folderSlice';
+import api from '../../../api/axios';
+import { formatDate } from '../../../utils';
 
-const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder }) => {
+const CreateFolderModal = React.memo(({ isOpen, onClose, isUpdate = false, folder }) => {
   const [name, setName] = useState(folder?.name || '');
   const [description, setDescription] = useState(folder?.description || '');
   const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setName(folder?.name || '');
-    setDescription(folder?.description || '');
-  }, [folder]);
+    setName(isUpdate ? folder?.name || '' : '');
+    setDescription(isUpdate ? folder?.description || '' : '');
+  }, [folder, isUpdate]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -28,16 +33,25 @@ const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder 
       return;
     }
 
-    onCreateFolder({
-      name: name.trim(),
-      description: description.trim(),
-    });
-
-    setName('');
-    setDescription('');
-    setErrors({});
-
-    // onClose();
+    let apiUrl = '/folders/create';
+    let apiMethod = 'post';
+    let postData = { name, description, parent_id: folder?.id };
+    if (isUpdate && folder) {
+      apiUrl = '/folders/update/' + folder.id;
+      apiMethod = 'put';
+      postData = { name, description, id: folder.id, parent_id: folder.parent_id };
+    }
+    api[apiMethod](apiUrl, postData)
+      .then(response => {
+        dispatch(setRefreshData(true));
+        setName('');
+        setDescription('');
+        setErrors({});
+        onClose();
+      })
+      .catch(error => {
+        console.error('Error creating folder:', error);
+      });
   };
 
   const handleCancel = () => {
@@ -45,8 +59,6 @@ const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder 
     setName('');
     setDescription('');
     setErrors({});
-
-    // Close modal
     onClose();
   };
 
@@ -56,7 +68,7 @@ const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder 
         Cancel
       </button>
       <button className="btn btn-primary" onClick={handleSubmit}>
-        {folder ? 'Update' : 'Create'}
+        {isUpdate ? 'Update' : 'Create'}
       </button>
     </>
   );
@@ -65,7 +77,7 @@ const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder 
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={folder ? 'Update Folder' : 'Create Folder'}
+      title={isUpdate ? 'Update Folder' : 'Create Folder'}
       footer={modalFooter}
     >
       <form className="create-folder-form" onSubmit={handleSubmit}>

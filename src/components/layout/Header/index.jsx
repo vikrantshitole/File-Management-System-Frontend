@@ -1,22 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, Filter, Plus, Upload } from 'react-feather';
+import React, { useState, useRef } from 'react';
+import { Filter, Plus, Upload } from 'react-feather';
 import { Vector } from '../../common/icons';
 import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
 import FiltersPopup from '../../Modals/FiltersModal/FiltersModal';
 import './Header.scss';
-import api from '../../../api/axios';
 import Breadcrumb from '../../common/Breadcrumb';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
-import { useDispatch } from 'react-redux';
-import { setRefreshData } from '../../../store/slices/folderSlice';
 
 const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const dispatch = useDispatch();
-
   const dropdownRef = useRef(null);
   const filterButtonRef = useRef(null);
 
@@ -34,18 +29,6 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   const handleUploadDocument = () => {
     setIsUploadFileModalOpen(true);
     setIsDropdownOpen(false);
-  };
-
-  const handleCreateFolderSubmit = folderData => {
-    api
-      .post('/folders/create', folderData)
-      .then(response => {
-        setIsCreateFolderModalOpen(false);
-        dispatch(setRefreshData(true));
-      })
-      .catch(error => {
-        console.error('Error creating folder:', error);
-      });
   };
 
   const handlePlusClick = () => {
@@ -97,7 +80,7 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen}
         onClose={() => setIsCreateFolderModalOpen(false)}
-        onCreateFolder={handleCreateFolderSubmit}
+        // onCreateFolder={handleCreateFolderSubmit}
       />
       <UploadDocumentModal
         isOpen={isUploadFileModalOpen}

@@ -8,17 +8,17 @@ import {
   selectAllFolders,
   selectCurrentFolder,
   setCurrentFolderExpanded,
-  setRefreshData,
   setSelectedFolder,
 } from '../../../../store/slices/folderSlice';
 import { getParentFolderDetails } from '../../../../utils';
-import { setCurrentFile } from '../../../../store/slices/fileSlice';
+import { selectCurrentFile, setCurrentFile } from '../../../../store/slices/fileSlice';
 
 const FolderTreeItem = ({ folder, level = 0 }) => {
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const dispatch = useDispatch();
   const folders = useSelector(selectAllFolders);
   const currentFolder = useSelector(selectCurrentFolder);
+  const currentFile = useSelector(selectCurrentFile);
 
   const handleToggle = e => {
     e.stopPropagation();
@@ -26,10 +26,11 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
       dispatch(setCurrentFolderExpanded(folder));
     }
     if (folder.type === 'file') {
-      dispatch(setCurrentFile(folder));
+      const newFile = folder.id === currentFile?.id ? null : folder;
+      dispatch(setCurrentFile(newFile));
     }
     let changeFile = folder;
-    if (folder.id === currentFolder?.id || folder.expanded) {
+    if ((folder.id === currentFolder?.id || folder.expanded) && folder.type === 'folder') {
       changeFile = getParentFolderDetails(folders, folder, folder.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));
@@ -40,20 +41,6 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
     setIsCreateFolderModalOpen(true);
   };
 
-  const handleCreateFolderSubmit = folderData => {
-    api
-      .post('/folders/create', {
-        ...folderData,
-        parent_id: folder.id,
-      })
-      .then(response => {
-        setIsCreateFolderModalOpen(false);
-        dispatch(setRefreshData(true));
-      })
-      .catch(error => {
-        console.error('Error creating folder:', error);
-      });
-  };
   return (
     <div className="folder-tree__item">
       <div
@@ -95,7 +82,8 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen}
         onClose={() => setIsCreateFolderModalOpen(false)}
-        onCreateFolder={handleCreateFolderSubmit}
+        folder={folder}
+        // onCreateFolder={handleCreateFolderSubmit}
       />
     </div>
   );

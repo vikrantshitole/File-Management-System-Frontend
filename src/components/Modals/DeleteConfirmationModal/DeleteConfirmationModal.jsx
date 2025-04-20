@@ -2,6 +2,9 @@ import React from 'react';
 import Modal from '../Modal';
 import { Trash2 } from 'react-feather';
 import './DeleteConfirmationModal.scss';
+import { setRefreshData } from '../../../store/slices/folderSlice';
+import { useDispatch } from 'react-redux';
+import api from '../../../api/axios';
 
 const DeleteConfirmationModal = ({
   isOpen,
@@ -9,10 +12,21 @@ const DeleteConfirmationModal = ({
   onConfirm,
   itemName,
   itemType = 'file', // 'file' or 'folder'
+  itemId,
 }) => {
+  const dispatch = useDispatch();
+
   const handleConfirm = () => {
-    onConfirm();
-    onClose();
+    api
+      .delete(`/${itemType}s/` + itemId)
+      .then(response => {
+        onClose();
+        dispatch(setRefreshData(true));
+      })
+      .catch(error => {
+        console.error('Error deleting file:', error);
+      });
+    // onConfirm();
   };
 
   const modalFooter = (

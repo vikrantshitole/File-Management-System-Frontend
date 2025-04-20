@@ -2,54 +2,31 @@ import React, { useCallback, useState } from 'react';
 import './FileList.scss';
 import FileListItem from '../FileListItem';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
-import { useDispatch } from 'react-redux';
-import { setRefreshData } from '../../../store/slices/folderSlice';
-import api from '../../../api/axios';
 import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
 
 const FileList = ({ files }) => {
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
-  // const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [file, setFile] = useState(null);
-  const dispatch = useDispatch();
+
   const handleUploadFile = useCallback(item => {
     setFile(item);
     setIsUploadFileModalOpen(true);
   }, []);
+
   const handleCreateFolder = useCallback(item => {
     setIsCreateFolderModalOpen(true);
     setIsUpdateFolder(false);
     setFile(item);
   }, []);
-  const handleCreateFolderSubmit = folderData => {
-    let apiUrl = '/folders/create';
-    let apiMethod = 'post';
-    let postData = { ...folderData, parent_id: file?.id };
-    if (isUpdateFolder && file) {
-      apiUrl = '/folders/update/' + file.id;
-      apiMethod = 'put';
-      postData = { ...folderData, id: file.id, parent_id: file.parent_id };
-    }
-    api[apiMethod](apiUrl, postData)
-      .then(response => {
-        dispatch(setRefreshData(true));
-        setIsCreateFolderModalOpen(false);
-        setIsUpdateFolder(false);
-      })
-      .catch(error => {
-        console.error('Error creating folder:', error);
-      })
-      .finally(() => {
-        setFile(null);
-      });
-  };
+
   const handleUpdateFolder = useCallback(item => {
     setFile(item);
     setIsUpdateFolder(true);
     setIsCreateFolderModalOpen(true);
   }, []);
+
   return (
     <div className="file-list">
       <table className="file-list__table">
@@ -83,13 +60,13 @@ const FileList = ({ files }) => {
       />
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen || isUpdateFolder}
-        folder={isUpdateFolder ? file : null}
+        folder={file}
+        isUpdate={isUpdateFolder}
         onClose={() => {
           setIsCreateFolderModalOpen(false);
           setIsUpdateFolder(false);
           setFile(null);
         }}
-        onCreateFolder={handleCreateFolderSubmit}
       />
     </div>
   );
