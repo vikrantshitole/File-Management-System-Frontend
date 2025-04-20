@@ -37,7 +37,7 @@ const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder 
     setDescription('');
     setErrors({});
 
-    onClose();
+    // onClose();
   };
 
   const handleCancel = () => {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { showErrorToast } from '../utils/toast';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -15,7 +16,8 @@ instance.interceptors.response.use(
   },
   error => {
     // Handle errors globally
-    console.error('API Error:', error.response || error.message);
+    console.error('API Error:', error.response);
+    showErrorToast(error?.response?.data?.message || error.message);
     return Promise.reject(error);
   }
 );
