@@ -100,8 +100,8 @@
   &__item::before {
     content: '';
     position: absolute;
-    top: 1.25rem; // aligns with the vertical center of the row
-    left: -1.5rem; // same as the indentation level
+    top: 1.25rem;
+    left: 0rem; 
     width: 1.5rem;
     height: 1px;
     border-top: 2px dashed $border-color;
@@ -126,17 +126,7 @@
       opacity: 0.5;
     }
   }
-  &::before {
-    content: '';
-    position: absolute;
-    top: 1.5rem; // aligns with the vertical center of the item
-    left: -1.5rem; // connects to parent's vertical line
-    width: 1.5rem;
-    height: 1px;
-    border-top: 2px dashed $border-color;
-    opacity: 0.5;
-  }
-
+  
   // Don’t show for root
   &--root::before {
     display: none;

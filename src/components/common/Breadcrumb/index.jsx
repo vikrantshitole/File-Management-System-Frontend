@@ -15,7 +15,7 @@ const Breadcrumb = ({setSideBarOpen, sideBarOpen}) => {
         {sideBarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
       </button>
       <div className="header__breadcrumb">
-        {breadcrumb.map((item, index) => (
+        {breadcrumb && breadcrumb.length > 0 ?breadcrumb.map((item, index) => (
           item.id !== currentFolder?.id ? <Fragment key={item.id}>
             <span className="header__breadcrumb-item">
               {item.name}
@@ -26,7 +26,7 @@ const Breadcrumb = ({setSideBarOpen, sideBarOpen}) => {
             <span className="header__breadcrumb-item header__breadcrumb-item--active">{item.name}</span>
           </Fragment>
 
-        ))}
+        )) : <span className="header__breadcrumb-item">File Management System</span>}
       </div>
     </div>
 

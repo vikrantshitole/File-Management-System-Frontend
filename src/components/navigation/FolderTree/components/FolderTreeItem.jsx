@@ -55,7 +55,7 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
     <div className="folder-tree__item">
       <div
         className={`folder-tree__item-content ${folder.expanded ? 'folder-tree__item-content--expanded' : ''}`}
-        style={{ paddingLeft: `${level * 1.5}rem` }}
+        style={{ marginLeft: `${level * 1.5}rem` }}
         onClick={handleToggle}
       >
         <div className="folder-tree__item-left" >

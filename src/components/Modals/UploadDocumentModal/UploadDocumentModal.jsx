@@ -76,8 +76,8 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       console.error('Upload error:', error);
       setError('Failed to start upload. Please try again.');
       cleanupEventSource();
+      
       setProgressData(null);
-      setSelectedFile(null);      
       dispatch(setUploadFileId(null));
     }
   };
@@ -87,9 +87,9 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
     
     completionTimeoutRef.current = setTimeout(() => {
       cleanupEventSource();
-      setProgressData(null);
-      setSelectedFile(null);
-      dispatch(setUploadFileId(null));
+      // setProgressData(null);
+      // setSelectedFile(null);
+      // dispatch(setUploadFileId(null));
       dispatch(setRefreshData(true));
       sessionStorage.removeItem('uploadFileId');
     }, 1000);
@@ -135,6 +135,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
         }
       };
       eventSource.addEventListener('end', () => {
+        handleCompletion()
         eventSource.close()
       })
       eventSource.onerror = (error) => {        
@@ -191,25 +192,26 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
     dispatch(setUploadFileId(null));
     onClose();
   };
-
+  const { progress, status } = progressData || {};
+  
   const modalFooter = (
     <div className="upload-modal__footer">
       <button
         className="upload-modal__button upload-modal__button--secondary"
         onClick={handleClose}
+        disabled={status === 'uploading'}
       >
         Cancel
       </button>
       <button
         className="upload-modal__button upload-modal__button--primary"
         onClick={handleUpload}
-        disabled={!selectedFile}
+        disabled={!selectedFile || status === 'uploading' || status === 'completed'}
       >
         Upload
       </button>
     </div>
   );
-  const { progress, status } = progressData || {};
   return (
     <Modal
       isOpen={isOpen}
@@ -244,7 +246,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
             )}
           </div>
         )}
-        {uploadFileId && status == 'uploading' && 
+        {selectedFile && (status === 'uploading' || status === 'completed') && 
           <UploadProgressModal 
             progress={progress} 
             fileName={progressData.file.originalname} 

@@ -3,7 +3,6 @@ import Modal from './Modal';
 import './CreateFolderModal.scss';
 
 const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder }) => {
-  console.log("folder",folder);
   const [name, setName] = useState(folder?.name || '');
   const [description, setDescription] = useState(folder?.description || '');
   const [errors, setErrors] = useState({});
