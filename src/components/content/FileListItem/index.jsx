@@ -67,7 +67,7 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
 
     }
     let changeFile = file;
-    if (file.id === currentFolder?.id || file.expanded) {
+    if ((file.id === currentFolder?.id || file.expanded) && file.type === 'folder') {
       changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));

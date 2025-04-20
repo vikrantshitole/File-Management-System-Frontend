@@ -8,6 +8,18 @@
 }
 
 // Base styles
+html {
+  font-size: 16px; // Base font size
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
+}
+
 body {
   margin: 0;
   font-family: $font-family-base;
@@ -15,15 +27,76 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: $text-color;
   line-height: $line-height-base;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #root {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .app {
   width: 100%;
-  height: 100%;
-  // display: flex;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @media (min-width: 576px) {
+    padding: 0 $spacing-lg;
+  }
+
+  @media (min-width: 768px) {
+    padding: 0 $spacing-xl;
+  }
+}
+
+.hide-mobile {
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @media (min-width: 768px) {
+    display: none !important;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .text-center-mobile {
+    text-align: center;
+  }
+}
+
+@each $size, $value in (
+  'xs': $spacing-xs,
+  'sm': $spacing-sm,
+  'md': $spacing-md,
+  'lg': $spacing-lg,
+  'xl': $spacing-xl
+) {
+  .p-#{$size} { padding: $value; }
+  .m-#{$size} { margin: $value; }
+  .pt-#{$size} { padding-top: $value; }
+  .pb-#{$size} { padding-bottom: $value; }
+  .pl-#{$size} { padding-left: $value; }
+  .pr-#{$size} { padding-right: $value; }
+  .mt-#{$size} { margin-top: $value; }
+  .mb-#{$size} { margin-bottom: $value; }
+  .ml-#{$size} { margin-left: $value; }
+  .mr-#{$size} { margin-right: $value; }
 } 
