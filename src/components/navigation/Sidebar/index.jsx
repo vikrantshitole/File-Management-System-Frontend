@@ -5,11 +5,11 @@ import './Sidebar.scss';
 import { useSelector } from 'react-redux';
 import { selectFileCount, selectFolderCount } from '../../../store/slices/folderSlice';
 
-const Sidebar = () => {
+const Sidebar = ({sideBarOpen}) => {
   const folderCount = useSelector(selectFolderCount);
   const fileCount = useSelector(selectFileCount);
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${sideBarOpen ? '' : 'sidebar--closed'}`}>
       <div className="sidebar__section">
         <h2 className="sidebar__title">Folders & Documents</h2>
         <div className="sidebar__stats">

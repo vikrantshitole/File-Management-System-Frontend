@@ -9,19 +9,20 @@ import { selectCurrentFile } from '../../../store/slices/fileSlice';
 import { useSelector } from 'react-redux';
 
 const Layout = () => {
-    const file = useSelector(selectCurrentFile);
-    const [filterData, setFilterData] = useState({name: '', description: '', date: ''});
+  const file = useSelector(selectCurrentFile);
+  const [filterData, setFilterData] = useState({ name: '', description: '', date: '' });
+  const [sideBarOpen, setSideBarOpen] = useState(true);
   return (
     <div className="layout">
       <LeftPanel />
       <div className="layout__container">
-        <Sidebar />
-        <div className="layout__main" style={{width: file ? '80%' : '100%'}}>
-          <Header setFilterData={setFilterData}/>
+        <Sidebar sideBarOpen={sideBarOpen} />
+        <div className="layout__main" style={{ width: file ? '80%' : '100%' }}>
+          <Header setFilterData={setFilterData} setSideBarOpen={setSideBarOpen} />
           <div className="layout__main-content">
 
-          <MainContent filterData={filterData} />
-          <FileViewer />
+            <MainContent filterData={filterData} />
+            <FileViewer />
           </div>
         </div>
       </div>

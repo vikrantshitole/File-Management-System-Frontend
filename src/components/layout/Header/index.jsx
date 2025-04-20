@@ -10,7 +10,7 @@ import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocument
 import { useDispatch } from 'react-redux';
 import { setRefreshData } from '../../../store/slices/folderSlice';
 
-const Header = ({setFilterData}) => {
+const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
@@ -62,9 +62,9 @@ const Header = ({setFilterData}) => {
 
   return (
     <header className="header">
-      <Breadcrumb />
+      <Breadcrumb setSideBarOpen={setSideBarOpen} sideBarOpen={sideBarOpen} />
       <div className="header__actions">
-        <button 
+        <button
           ref={filterButtonRef}
           className={`header__action-button ${isFiltersOpen ? 'header__action-button--active' : ''}`}
           onClick={handleFilterClick}
@@ -72,11 +72,11 @@ const Header = ({setFilterData}) => {
           <Filter size={18} color={'#ffffff'} fill='#ffffff' />
         </button>
         <div className="header__dropdown" ref={dropdownRef} onMouseDown={handleClickOutside}>
-          <button 
+          <button
             className={`header__action-button ${isDropdownOpen ? 'header__action-button--active' : ''}`}
             onClick={handlePlusClick}
           >
-            <Plus size={18} color={'#ffffff'} fill='#ffffff' fontSize={18}/>
+            <Plus size={18} color={'#ffffff'} fill='#ffffff' fontSize={18} />
           </button>
           {isDropdownOpen && (
             <div className="header__dropdown-menu">
