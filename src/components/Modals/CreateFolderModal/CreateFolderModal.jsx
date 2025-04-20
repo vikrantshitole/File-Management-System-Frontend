@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Modal from './Modal';
+import Modal from '../Modal';
 import './CreateFolderModal.scss';
 
 const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder }) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CreateFolderModal from '../../../Modals/CreateFolderModal';
+import CreateFolderModal from '../../../Modals/CreateFolderModal/CreateFolderModal';
 import api from '../../../../api/axios';
 import { ChevronRight, Plus } from 'react-feather';
 import { GoogleDocs, Vector } from '../../../common/icons';

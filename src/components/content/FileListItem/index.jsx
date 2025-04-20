@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { MoreVertical } from 'react-feather';
 import FolderOptionsMenu from '../../common/FolderOptionsMenu/FolderOptionsMenu';
 import { Vector, GoogleDocs } from '../../common/icons';
-import CreateFolderModal from '../../Modals/CreateFolderModal';
+import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 import api from '../../../api/axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,14 +17,7 @@ import {
 import { getParentFolderDetails, formatDate } from '../../../utils';
 import DeleteConfirmationModal from '../../Modals/DeleteConfirmationModal/DeleteConfirmationModal';
 
-const FileListItem = ({
-  file,
-  level = 0,
-  onUploadFile,
-  onCreateFolder,
-  onUpdateFolder,
-  setFile,
-}) => {
+const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const moreButtonRef = useRef(null);
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
@@ -40,8 +33,7 @@ const FileListItem = ({
   };
 
   const handleEdit = () => {
-    onUpdateFolder(true);
-    setFile(file);
+    onUpdateFolder(file);
     setIsMenuOpen(false);
   };
 
@@ -51,13 +43,13 @@ const FileListItem = ({
   };
 
   const handleCreateFolder = () => {
-    onCreateFolder(true);
+    onCreateFolder(file);
     setIsMenuOpen(false);
   };
 
   const handleUploadDocument = () => {
     setIsMenuOpen(false);
-    onUploadFile(file.id);
+    onUploadFile(file);
   };
 
   const getMenuPosition = () => {
@@ -152,6 +144,8 @@ const FileListItem = ({
             file={child}
             level={level + 1}
             onUploadFile={onUploadFile}
+            onCreateFolder={onCreateFolder}
+            onUpdateFolder={onUpdateFolder}
           />
         ))}
 

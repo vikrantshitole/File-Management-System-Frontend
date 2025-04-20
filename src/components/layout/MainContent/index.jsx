@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { selectAllFolders, selectRefreshData, setFolders } from '../../../store/slices/folderSlice';
 import Pagination from '../../common/Pagination';
 const MainContent = ({ filterData }) => {
-  // Mock data - replace with actual data from your application
   const files = useSelector(selectAllFolders);
   const refreshData = useSelector(selectRefreshData);
   const [pagination, setPagination] = useState({
@@ -56,9 +55,11 @@ const MainContent = ({ filterData }) => {
 
     fetchData();
   }, [refreshData, currentPage, filterData]);
+
   const handlePageChange = useCallback(page => {
     setPagination(prev => ({ ...prev, page }));
   }, []);
+
   return (
     <main className="main-content">
       <FileList files={files} />

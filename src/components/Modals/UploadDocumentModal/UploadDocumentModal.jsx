@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux';
 import { setRefreshData } from '../../../store/slices/folderSlice';
 const mimeTypes = {
   'application/pdf': ['.pdf'],
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
   'text/plain': ['.txt'],
   'image/png': ['.png'],
   'image/jpeg': ['.jpg', '.jpeg'],
@@ -126,9 +125,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
             } else {
               setError('Error processing upload progress');
               cleanupEventSource();
-              setProgressData(null);
-              setSelectedFile(null);
-              setUploadFileId(null);
+              clearUpState();
             }
           }
         };
@@ -138,24 +135,18 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
         });
         eventSource.onerror = error => {
           if (lastProgressData && lastProgressData.progress === 100) {
-            // setProgressData(lastProgressData);
             handleCompletion();
           } else {
             console.error('EventSource error:', error);
             setError('Lost connection to upload progress. Please try again.');
             cleanupEventSource();
-            setProgressData(() => null);
-            setSelectedFile(null);
-            setUploadFileId(null);
           }
         };
       } catch (error) {
         console.error('Error setting up EventSource:', error);
         setError('Failed to monitor upload progress');
         cleanupEventSource();
-        setProgressData(() => null);
-        setSelectedFile(null);
-        setUploadFileId(null);
+        clearUpState();
       }
     },
     [cleanupEventSource, dispatch, handleCompletion]
@@ -171,10 +162,8 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
   useEffect(() => {
     if (!isOpen) {
       cleanupEventSource();
-      setProgressData(() => null);
-      setSelectedFile(null);
       setError(null);
-      setUploadFileId(null);
+      clearUpState();
     }
     const id = sessionStorage.getItem('uploadFileId');
     if (id) {
@@ -183,12 +172,16 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
     }
   }, [isOpen]);
 
-  const handleClose = () => {
-    cleanupEventSource();
+  const clearUpState = () => {
     setProgressData(() => null);
     setSelectedFile(null);
-    setError(null);
     setUploadFileId(null);
+  };
+
+  const handleClose = () => {
+    cleanupEventSource();
+    clearUpState();
+    setError(null);
     onClose();
   };
   const { progress, status } = progressData || {};

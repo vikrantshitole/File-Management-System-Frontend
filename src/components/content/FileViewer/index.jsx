@@ -32,8 +32,8 @@ const FileViewer = () => {
     return null;
   }
 
-  const extension = useMemo(() => file.file_path.split('.').pop().toLowerCase(), [file]);
-  const fileUrl = useMemo(() => import.meta.env.VITE_API_IMAGE_URL + file.file_path, [file]);
+  const extension = file.file_path.split('.').pop().toLowerCase();
+  const fileUrl = import.meta.env.VITE_API_IMAGE_URL + file.file_path;
 
   return (
     <div className="file-viewer">

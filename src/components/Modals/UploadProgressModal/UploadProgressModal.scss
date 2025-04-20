@@ -8,7 +8,8 @@
 
   &__info {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 1rem;
     align-items: center;
   }
 
@@ -37,13 +38,14 @@
 
   &__fill {
     height: 100%;
-    background-color: $primary-color;
+    background-color: #28f215;
     transition: width 0.3s ease;
   }
 
   &__status {
     display: flex;
     align-items: center;
+    justify-content: end;
     gap: 8px;
   }
 
@@ -56,5 +58,10 @@
   &__text {
     font-size: $font-size-sm;
     color: $text-color-secondary;
+  }
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
   }
 }

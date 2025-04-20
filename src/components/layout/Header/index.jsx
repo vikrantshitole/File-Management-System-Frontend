@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, Filter, Plus, Upload } from 'react-feather';
 import { Vector } from '../../common/icons';
-import CreateFolderModal from '../../Modals/CreateFolderModal';
+import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
 import FiltersPopup from '../../Modals/FiltersModal/FiltersModal';
 import './Header.scss';
 import api from '../../../api/axios';

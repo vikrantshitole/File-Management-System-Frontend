@@ -1,4 +1,5 @@
-@import '../../../styles/variables';
+@use 'sass:color' as *;
+@use '../../../styles/variables' as *;
 
 .delete-confirmation-modal {
   &__content {
@@ -48,7 +49,7 @@
       border: 1px solid $border-color;
 
       &:hover {
-        background-color: darken($background-color-light, 5%);
+        background-color: adjust($background-color-light, $lightness: 5%);
       }
     }
 
@@ -58,7 +59,7 @@
       border: none;
 
       &:hover {
-        background-color: darken($error-color, 5%);
+        background-color: adjust($error-color, $lightness: 5%);
       }
     }
   }

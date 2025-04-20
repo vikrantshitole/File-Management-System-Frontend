@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
 import './UploadProgressModal.scss';
+import React, { useMemo } from 'react';
+import { GoogleDocs } from '../../common/icons';
 
 const UploadProgressModal = ({ progress, fileName, fileSize }) => {
   const size = useMemo(() => {
@@ -13,8 +14,13 @@ const UploadProgressModal = ({ progress, fileName, fileSize }) => {
   return (
     <div className="upload-progress">
       <div className="upload-progress__info">
-        <span className="upload-progress__filename">{fileName}</span>
-        <span className="upload-progress__size">{size}</span>
+        <span className="upload-progress__icon">
+          <GoogleDocs size={50} />
+        </span>
+        <div className="upload-progress__details">
+          <span className="upload-progress__filename">{fileName}</span>
+          <span className="upload-progress__size">{size}</span>
+        </div>
       </div>
       <div className="upload-progress__bar">
         <div className="upload-progress__fill" style={{ width: `${progress}%` }} />
