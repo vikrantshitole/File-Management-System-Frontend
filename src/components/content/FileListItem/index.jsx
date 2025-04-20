@@ -11,11 +11,9 @@ import { setSelectedFolder, selectCurrentFolder, selectAllFolders, setCurrentFol
 import { getParentFolderDetails, formatDate } from '../../../utils';
 import DeleteConfirmationModal from '../../Modals/DeleteConfirmationModal/DeleteConfirmationModal';
 
-const FileListItem = ({ file, level = 0, onUploadFile }) => {
+const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder, setFile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const moreButtonRef = useRef(null);
-  const [isUpdateFolder, setIsUpdateFolder] = useState(false);
-  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen]  = useState(false);
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
   const dispatch = useDispatch();
   const currentFolder = useSelector(selectCurrentFolder);
@@ -29,7 +27,8 @@ const FileListItem = ({ file, level = 0, onUploadFile }) => {
   };
 
   const handleEdit = () => {
-    setIsUpdateFolder(true);
+    onUpdateFolder(true);
+    setFile(file);
     setIsMenuOpen(false);
   };
 
@@ -40,7 +39,7 @@ const FileListItem = ({ file, level = 0, onUploadFile }) => {
   };
 
   const handleCreateFolder = () => {
-    setIsCreateFolderModalOpen(true);
+    onCreateFolder(true);
     setIsMenuOpen(false);
   };
 
@@ -59,28 +58,6 @@ const FileListItem = ({ file, level = 0, onUploadFile }) => {
     };
   };
 
-  const handleCreateFolderSubmit = (folderData) => {
-    let apiUrl = '/folders/create';
-    let apiMethod = 'post';
-    let postData = { ...folderData, parent_id: file.id };
-    if (isUpdateFolder) {
-      apiUrl = '/folders/update/' + file.id;
-      apiMethod = 'put';
-      postData = { ...folderData, id: file.id ,parent_id: file.parent_id};
-    }
-    api[apiMethod](apiUrl, postData)
-      .then((response) => {
-        dispatch(setRefreshData(true));
-      })
-      .catch((error) => {
-        console.error('Error creating folder:', error);
-      })
-      .finally(() => {
-        setIsCreateFolderModalOpen(false);
-        setIsUpdateFolder(false);
-      });
-  };
-  
   const handleIconClick = () => {
     if (isFolder) {
       dispatch(setCurrentFolderExpanded(file));
@@ -159,18 +136,10 @@ const FileListItem = ({ file, level = 0, onUploadFile }) => {
 
       {file.expanded &&
         file.children.map((child) => (
-          <FileListItem key={child.type === 'folder' ? child.id : child.id+child.file_path} file={child} level={level + 1} />
+          <FileListItem key={isFolder? child.id : child.id + child.file_path} file={child} level={level + 1} onUploadFile={onUploadFile}/>
         ))}
-      <CreateFolderModal
-        isOpen={isCreateFolderModalOpen || isUpdateFolder}
-        folder={isUpdateFolder ? file : null}
-        onClose={() => {
-          setIsCreateFolderModalOpen(false);
-          setIsUpdateFolder(false);
-        }}
-        onCreateFolder={handleCreateFolderSubmit}
-      />
-  
+        
+     
         <DeleteConfirmationModal
           isOpen={isDeleteConfirmationModalOpen}
           onClose={() => setIsDeleteConfirmationModalOpen(false)}

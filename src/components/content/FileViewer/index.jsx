@@ -37,7 +37,7 @@ const FileViewer = () => {
 
   return (
     <div className="file-viewer">
-      {['png', 'jpg', 'jpeg', 'gif'].includes(extension) && (
+      {['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(extension) && (
         <img src={fileUrl} alt="Preview" className="file-viewer__image" />
       )}
 
@@ -51,11 +51,11 @@ const FileViewer = () => {
         />
       )}
 
-      {['txt', 'csv', 'json', 'log'].includes(extension) && (
+      {['txt'].includes(extension) && (
         <pre className="file-viewer__text">{textContent}</pre>
       )}
 
-      {!['png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt', 'csv', 'json', 'log'].includes(extension) && (
+      {!['png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt','svg'].includes(extension) && (
         <div className="file-viewer__message">Unsupported file type</div>
       )}
     </div>

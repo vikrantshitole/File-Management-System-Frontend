@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import './CreateFolderModal.scss';
 
-const CreateFolderModal = ({ isOpen, onClose, onCreateFolder, folder }) => {
+const CreateFolderModal = React.memo(({ isOpen, onClose, onCreateFolder, folder }) => {
+  console.log("folder",folder);
   const [name, setName] = useState(folder?.name || '');
   const [description, setDescription] = useState(folder?.description || '');
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    setName(folder?.name || '');
+    setDescription(folder?.description || '');
+  }, [folder]);
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -101,6 +107,6 @@ const CreateFolderModal = ({ isOpen, onClose, onCreateFolder, folder }) => {
       </form>
     </Modal>
   );
-};
+});
 
 export default CreateFolderModal; 

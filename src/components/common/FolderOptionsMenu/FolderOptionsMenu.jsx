@@ -43,13 +43,15 @@ const FolderOptionsMenu = ({
       ref={menuRef}
       style={menuStyle}
     >
-      <button 
-        className="folder-options-menu__item"
-        onClick={onEdit}
+      {isFolder && (
+        <button 
+          className="folder-options-menu__item"
+          onClick={onEdit}
       >
-        <PencilIcon size={18} />
-        <span>Edit</span>
-      </button>
+          <PencilIcon size={18} />
+          <span>Edit</span>
+        </button>
+      )}
 
       <button 
         className="folder-options-menu__item"
@@ -59,23 +61,27 @@ const FolderOptionsMenu = ({
         <span>Delete</span>
       </button>
 
-      <button 
-        className="folder-options-menu__item"
-        onClick={onCreateFolder}
-        disabled={!isFolder}
+      {isFolder && (
+        <button 
+          className="folder-options-menu__item"
+          onClick={onCreateFolder}
+          disabled={!isFolder}
       >
-        <FolderPlusIcon size={18} />
-        <span>Create Folder</span>
-      </button>
-
-      <button 
-        className="folder-options-menu__item"
-        onClick={onUploadDocument}
-        disabled={!isFolder}
-      >
-        <FileUploadIcon size={18} />
-        <span>Upload Document</span>
-      </button>
+          <FolderPlusIcon size={18} />
+          <span>Create Folder</span>
+        </button>
+      )}
+    {
+      isFolder && (
+        <button 
+          className="folder-options-menu__item"
+          onClick={onUploadDocument}
+          disabled={!isFolder}
+        >
+          <FileUploadIcon size={18} />
+          <span>Upload Document</span>
+        </button>
+      )}
     </div>
   );
 };
