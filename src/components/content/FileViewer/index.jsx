@@ -38,7 +38,7 @@ const FileViewer = () => {
   return (
     <div className="file-viewer">
       {['png', 'jpg', 'jpeg', 'gif'].includes(extension) && (
-        <img src={fileUrl} alt="Preview" className="file-viewer__image" width={'100%'}  height={'100%'}/>
+        <img src={fileUrl} alt="Preview" className="file-viewer__image" />
       )}
 
       {extension === 'pdf' && (

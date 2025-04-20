@@ -97,20 +97,49 @@
   // &__item-content:hover &__add {
   //   opacity: 1;
   // }
+  &__item::before {
+    content: '';
+    position: absolute;
+    top: 1.25rem; // aligns with the vertical center of the row
+    left: -1.5rem; // same as the indentation level
+    width: 1.5rem;
+    height: 1px;
+    border-top: 2px dashed $border-color;
+    opacity: 0.5;
+  }
+  
 
   &__children {
+    
     position: relative;
     margin-left: 1.5rem;
-
+    padding-left: 0.5rem;
+  
     &::before {
       content: '';
       position: absolute;
-      left: 0.5rem;
       top: 0;
       bottom: 0;
+      left: 0;
       width: 1px;
-      background-color: $border-color;
+      border-left: 2px dashed $border-color;
       opacity: 0.5;
     }
   }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 1.5rem; // aligns with the vertical center of the item
+    left: -1.5rem; // connects to parent's vertical line
+    width: 1.5rem;
+    height: 1px;
+    border-top: 2px dashed $border-color;
+    opacity: 0.5;
+  }
+
+  // Don’t show for root
+  &--root::before {
+    display: none;
+  }
+
 } 

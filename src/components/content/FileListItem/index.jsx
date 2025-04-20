@@ -11,12 +11,11 @@ import { setSelectedFolder, selectCurrentFolder, selectAllFolders, setCurrentFol
 import { getParentFolderDetails, formatDate } from '../../../utils';
 import DeleteConfirmationModal from '../../Modals/DeleteConfirmationModal/DeleteConfirmationModal';
 
-const FileListItem = ({ file, level = 0 }) => {
+const FileListItem = ({ file, level = 0, onUploadFile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const moreButtonRef = useRef(null);
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen]  = useState(false);
-  const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
   const dispatch = useDispatch();
   const currentFolder = useSelector(selectCurrentFolder);
@@ -46,8 +45,8 @@ const FileListItem = ({ file, level = 0 }) => {
   };
 
   const handleUploadDocument = () => {
-    setIsUploadFileModalOpen(true);
     setIsMenuOpen(false);
+    onUploadFile(file.id);
   };
 
   const getMenuPosition = () => {
@@ -170,11 +169,6 @@ const FileListItem = ({ file, level = 0 }) => {
           setIsUpdateFolder(false);
         }}
         onCreateFolder={handleCreateFolderSubmit}
-      />
-      <UploadDocumentModal
-        isOpen={isUploadFileModalOpen}
-        folderId={file.id}
-        onClose={() => setIsUploadFileModalOpen(false)}
       />
   
         <DeleteConfirmationModal

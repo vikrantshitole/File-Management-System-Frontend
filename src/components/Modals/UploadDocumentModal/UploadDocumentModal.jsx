@@ -7,6 +7,15 @@ import api from '../../../api/axios';
 import UploadProgressModal from '../UploadProgressModal/UploadProgressModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUploadFileId, setRefreshData, setUploadFileId } from '../../../store/slices/folderSlice';
+const mimeTypes = {
+  'application/pdf': ['.pdf'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'], 
+  'text/plain': ['.txt'],
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/gif': ['.gif'],
+  'image/svg+xml': ['.svg'] 
+};
 
 const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -27,13 +36,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'text/plain': ['.txt'],
-      'image/png': ['.png'],
-      'image/jpeg': ['.jpg', '.jpeg'],
-      'image/gif': ['.gif'],
-    }
+    accept: mimeTypes
   });
 
   const cleanupEventSource = useCallback(() => {
@@ -80,10 +83,8 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
   };
 
   const handleCompletion = useCallback(() => {
-    // Store the last progress data
     setProgressData(prev => ({ ...prev, status: 'completed' }));
     
-    // Set a timeout to clean up
     completionTimeoutRef.current = setTimeout(() => {
       cleanupEventSource();
       setProgressData(null);
@@ -121,7 +122,6 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
           }
         } catch (error) {
           console.error('Error processing progress data:', error);
-          // If we have last progress data and it was successful, consider it completed
           if (lastProgressData && lastProgressData.progress === 100) {
             setProgressData(lastProgressData);
             handleCompletion();
@@ -134,9 +134,10 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
           }
         }
       };
-
-      eventSource.onerror = (error) => {
-        // If we have last progress data and it was successful, consider it completed
+      eventSource.addEventListener('end', () => {
+        eventSource.close()
+      })
+      eventSource.onerror = (error) => {        
         if (lastProgressData && lastProgressData.progress === 100) {
             setProgressData(lastProgressData);
             handleCompletion();
@@ -165,7 +166,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       initializeEventSource(uploadFileId);
     }
     return cleanupEventSource;
-  }, [uploadFileId, initializeEventSource, cleanupEventSource]);
+  }, [uploadFileId]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -180,7 +181,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId=null }) => {
       initializeEventSource(id)
       dispatch(setUploadFileId(id));
     }
-  }, [isOpen, dispatch, cleanupEventSource]);
+  }, [isOpen]);
 
   const handleClose = () => {
     cleanupEventSource();

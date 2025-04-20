@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './FileList.scss';
 import FileListItem from '../FileListItem';
+import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 
 
 const FileList = ({ files }) => {
+  const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const handleUploadFile = useCallback((folderId) => {
+    setSelectedFolderId(folderId);
+    setIsUploadFileModalOpen(true);
+  }, []);
+
   return (
     <div className="file-list">
       <table className="file-list__table">
@@ -19,10 +27,16 @@ const FileList = ({ files }) => {
         </thead>
         <tbody>
           {files.map((child) => (
-          <FileListItem key={child.type === 'folder' ? child.id : child.id+child.file_path} file={child}/>
+          <FileListItem key={child.type === 'folder' ? child.id : child.id+child.file_path} file={child} onUploadFile={handleUploadFile}/>
         ))}
         </tbody>
       </table>
+
+      <UploadDocumentModal
+        isOpen={isUploadFileModalOpen}
+        folderId={selectedFolderId}
+        onClose={() => setIsUploadFileModalOpen(false)}
+      />
     </div>
   );
 };
