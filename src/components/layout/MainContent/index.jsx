@@ -1,25 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import FileList from '../../content/FileList';
 import './MainContent.scss';
 import { useSelector } from 'react-redux';
 import api from '../../../api/axios';
 import { useDispatch } from 'react-redux';
-import { selectAllFolders, selectRefreshData, setFolders, selectCurrentPage, selectTotalPages, selectTotalItems, selectItemsPerPage, changeCurrentPage } from '../../../store/slices/folderSlice';
+import { selectAllFolders, selectRefreshData, setFolders } from '../../../store/slices/folderSlice';
 import Pagination from '../../common/Pagination';
-const MainContent = ({filterData}) => {
+const MainContent = ({ filterData }) => {
   // Mock data - replace with actual data from your application
-  const files = useSelector(selectAllFolders)
+  const files = useSelector(selectAllFolders);
   const refreshData = useSelector(selectRefreshData);
-  const currentPage = useSelector(selectCurrentPage);
-  const totalPages = useSelector(selectTotalPages);
-  const itemsPerPage = useSelector(selectItemsPerPage); 
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+  });
   const dispatch = useDispatch();
+  const { page: currentPage, totalPages, itemsPerPage } = pagination;
   useEffect(() => {
     const fetchData = async () => {
       try {
         let query = `page=${currentPage}&limit=${itemsPerPage}`;
-        let queryParams = {page: currentPage, limit: itemsPerPage};
-        const {name, description, date} = filterData;
+        let queryParams = { page: currentPage, limit: itemsPerPage };
+        const { name, description, date } = filterData;
         if (name) {
           query += `&name=${name}`;
           queryParams.name = name;
@@ -34,26 +38,32 @@ const MainContent = ({filterData}) => {
         }
         query = new URLSearchParams(queryParams).toString();
         const response = await api.get(`/folders?${query}`);
-        const {data, counts, pagination} =response.data
-                
-        dispatch(setFolders({ folders: data,counts, pagination }));
-      } 
-      catch (error) {
+        const { data, counts, pagination } = response.data;
+
+        dispatch(setFolders({ folders: data, counts }));
+        setPagination(prev => ({
+          ...prev,
+          page: pagination.page,
+          totalPages: pagination.totalPages,
+          totalItems: pagination.total,
+          itemsPerPage: pagination.limit,
+        }));
+      } catch (error) {
         console.error('Error fetching folder hierarchy:', error);
         return [];
       }
     };
 
     fetchData();
-  }, [refreshData,currentPage,filterData]);
-  const handlePageChange = (page) => {
-    dispatch(changeCurrentPage(page));
-  }
+  }, [refreshData, currentPage, filterData]);
+  const handlePageChange = useCallback(page => {
+    setPagination(prev => ({ ...prev, page }));
+  }, []);
   return (
     <main className="main-content">
       <FileList files={files} />
 
-      <Pagination 
+      <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
@@ -62,4 +72,4 @@ const MainContent = ({filterData}) => {
   );
 };
 
-export default MainContent; 
+export default MainContent;

@@ -3,12 +3,12 @@ import Modal from '../Modal';
 import { Trash2 } from 'react-feather';
 import './DeleteConfirmationModal.scss';
 
-const DeleteConfirmationModal = ({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
+const DeleteConfirmationModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
   itemName,
-  itemType = 'file' // 'file' or 'folder'
+  itemType = 'file', // 'file' or 'folder'
 }) => {
   const handleConfirm = () => {
     onConfirm();
@@ -33,12 +33,7 @@ const DeleteConfirmationModal = ({
   );
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={`Delete ${itemType}`}
-      footer={modalFooter}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title={`Delete ${itemType}`} footer={modalFooter}>
       <div className="delete-confirmation-modal__content">
         <div className="delete-confirmation-modal__icon">
           <Trash2 size={24} />
@@ -46,12 +41,10 @@ const DeleteConfirmationModal = ({
         <p className="delete-confirmation-modal__message">
           Are you sure you want to delete {itemType} "{itemName}"?
         </p>
-        <p className="delete-confirmation-modal__warning">
-          This action cannot be undone.
-        </p>
+        <p className="delete-confirmation-modal__warning">This action cannot be undone.</p>
       </div>
     </Modal>
   );
 };
 
-export default DeleteConfirmationModal; 
+export default DeleteConfirmationModal;

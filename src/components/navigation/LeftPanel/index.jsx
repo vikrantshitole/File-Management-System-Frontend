@@ -14,7 +14,7 @@ const LeftPanel = () => {
     <div className="left-panel">
       <div className="left-panel__menu">
         {menuItems.map((item, index) => (
-          <button 
+          <button
             key={index}
             className={`left-panel__button ${item.label === 'Files' ? 'left-panel__button--active' : ''}`}
             title={item.label}
@@ -32,4 +32,4 @@ const LeftPanel = () => {
   );
 };
 
-export default LeftPanel; 
+export default LeftPanel;

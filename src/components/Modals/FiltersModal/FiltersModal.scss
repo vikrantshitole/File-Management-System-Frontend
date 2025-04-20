@@ -1,5 +1,5 @@
 @use '../../../styles/variables' as *;
-@use "sass:color";
+@use 'sass:color';
 
 .filters-popup {
   position: fixed;
@@ -92,7 +92,9 @@
     font-size: $font-size-sm;
     color: $text-color;
     background-color: $white;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
 
     &:hover {
       border-color: color.adjust($border-color, $lightness: -10%);
@@ -131,16 +133,16 @@
     transition: all 0.2s ease;
 
     &--primary {
-      background-color: #2F2F69;
+      background-color: #2f2f69;
       color: $white;
       border: none;
 
       &:hover {
-        background-color: color.adjust(#2F2F69, $lightness: -5%);
+        background-color: color.adjust(#2f2f69, $lightness: -5%);
       }
 
       &:active {
-        background-color: color.adjust(#2F2F69, $lightness: -10%);
+        background-color: color.adjust(#2f2f69, $lightness: -10%);
       }
     }
 
@@ -170,4 +172,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-} 
+}

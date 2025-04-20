@@ -20,7 +20,7 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   const dropdownRef = useRef(null);
   const filterButtonRef = useRef(null);
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = event => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
@@ -36,13 +36,14 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
     setIsDropdownOpen(false);
   };
 
-  const handleCreateFolderSubmit = (folderData) => {
-    api.post('/folders/create', folderData)
-      .then((response) => {
+  const handleCreateFolderSubmit = folderData => {
+    api
+      .post('/folders/create', folderData)
+      .then(response => {
         setIsCreateFolderModalOpen(false);
         dispatch(setRefreshData(true));
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Error creating folder:', error);
       });
   };
@@ -69,14 +70,14 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
           className={`header__action-button ${isFiltersOpen ? 'header__action-button--active' : ''}`}
           onClick={handleFilterClick}
         >
-          <Filter size={18} color={'#ffffff'} fill='#ffffff' />
+          <Filter size={18} color={'#ffffff'} fill="#ffffff" />
         </button>
         <div className="header__dropdown" ref={dropdownRef} onMouseDown={handleClickOutside}>
           <button
             className={`header__action-button ${isDropdownOpen ? 'header__action-button--active' : ''}`}
             onClick={handlePlusClick}
           >
-            <Plus size={18} color={'#ffffff'} fill='#ffffff' fontSize={18} />
+            <Plus size={18} color={'#ffffff'} fill="#ffffff" fontSize={18} />
           </button>
           {isDropdownOpen && (
             <div className="header__dropdown-menu">
@@ -112,4 +113,4 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   );
 };
 
-export default Header; 
+export default Header;

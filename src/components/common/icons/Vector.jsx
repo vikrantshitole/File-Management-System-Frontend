@@ -15,4 +15,4 @@ const Vector = ({ size = 16, color = '#5F6368' }) => (
   </svg>
 );
 
-export default Vector; 
+export default Vector;

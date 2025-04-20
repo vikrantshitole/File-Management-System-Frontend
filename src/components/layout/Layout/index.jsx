@@ -18,9 +18,12 @@ const Layout = () => {
       <div className="layout__container">
         <Sidebar sideBarOpen={sideBarOpen} />
         <div className="layout__main" style={{ width: file ? '80%' : '100%' }}>
-          <Header setFilterData={setFilterData} setSideBarOpen={setSideBarOpen} sideBarOpen={sideBarOpen} />
+          <Header
+            setFilterData={setFilterData}
+            setSideBarOpen={setSideBarOpen}
+            sideBarOpen={sideBarOpen}
+          />
           <div className="layout__main-content">
-
             <MainContent filterData={filterData} />
             <FileViewer />
           </div>
@@ -30,4 +33,4 @@ const Layout = () => {
   );
 };
 
-export default Layout; 
+export default Layout;

@@ -6,17 +6,16 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    date: ''
+    date: '',
   });
   const popupRef = useRef(null);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
 
-    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -24,25 +23,27 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
     setFormData({
       name: '',
       description: '',
-      date: ''
+      date: '',
     });
     setFilterData({
       name: '',
       description: '',
-      date: ''
+      date: '',
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     setFilterData(formData);
     onClose();
   };
 
-  const handleClickOutside = (event) => {
-    if (popupRef.current && 
-        !popupRef.current.contains(event.target) && 
-        !anchorRef.current.contains(event.target)) {
+  const handleClickOutside = event => {
+    if (
+      popupRef.current &&
+      !popupRef.current.contains(event.target) &&
+      !anchorRef.current.contains(event.target)
+    ) {
       onClose();
     }
   };
@@ -50,7 +51,7 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      
+
       // Position the popup relative to the filter button
       if (popupRef.current && anchorRef.current) {
         const buttonRect = anchorRef.current.getBoundingClientRect();
@@ -71,16 +72,10 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
       <div className="filters-popup__header">
         <h2 className="filters-popup__title">Filters</h2>
         <div className="filters-popup__actions">
-          <button 
-            className="filters-popup__clear"
-            onClick={handleClear}
-          >
+          <button className="filters-popup__clear" onClick={handleClear}>
             Clear
           </button>
-          <button 
-            className="filters-popup__close"
-            onClick={onClose}
-          >
+          <button className="filters-popup__close" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
@@ -130,17 +125,14 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
         </div>
 
         <div className="filters-popup__footer">
-          <button 
+          <button
             type="button"
-            className="filters-popup__button filters-popup__button--secondary" 
+            className="filters-popup__button filters-popup__button--secondary"
             onClick={onClose}
           >
             Cancel
           </button>
-          <button 
-            type="submit"
-            className="filters-popup__button filters-popup__button--primary"
-          >
+          <button type="submit" className="filters-popup__button filters-popup__button--primary">
             Apply
           </button>
         </div>
@@ -149,4 +141,4 @@ const FiltersPopup = ({ isOpen, onClose, anchorRef, setFilterData }) => {
   );
 };
 
-export default FiltersPopup; 
+export default FiltersPopup;

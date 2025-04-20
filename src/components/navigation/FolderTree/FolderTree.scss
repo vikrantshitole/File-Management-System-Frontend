@@ -1,5 +1,5 @@
 @use '../../../styles/variables' as *;
-@use "sass:color";
+@use 'sass:color';
 
 .folder-tree {
   &__item {
@@ -87,7 +87,9 @@
     color: $primary-color;
     cursor: pointer;
     opacity: 1;
-    transition: opacity 0.2s ease, color 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      color 0.2s ease;
 
     &:hover {
       color: $primary-color;
@@ -101,20 +103,18 @@
     content: '';
     position: absolute;
     top: 1.25rem;
-    left: 0rem; 
+    left: 0rem;
     width: 1.5rem;
     height: 1px;
     border-top: 2px dashed $border-color;
     opacity: 0.5;
   }
-  
 
   &__children {
-    
     position: relative;
     margin-left: 1.5rem;
     padding-left: 0.5rem;
-  
+
     &::before {
       content: '';
       position: absolute;
@@ -126,10 +126,9 @@
       opacity: 0.5;
     }
   }
-  
+
   // Don’t show for root
   &--root::before {
     display: none;
   }
-
-} 
+}

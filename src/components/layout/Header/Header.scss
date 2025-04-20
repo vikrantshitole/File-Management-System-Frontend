@@ -1,5 +1,5 @@
 @use '../../../styles/variables' as *;
-@use "sass:color";
+@use 'sass:color';
 
 .header {
   display: flex;
@@ -152,4 +152,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-} 
+}

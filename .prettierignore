@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+dist
+build
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build files
+*.min.js
+*.min.css
+
+# Other
+package-lock.json
+yarn.lock
+pnpm-lock.yaml 

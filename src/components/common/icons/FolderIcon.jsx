@@ -32,4 +32,4 @@ const FolderIcon = ({ size = 'medium', color = '#000000', className = '' }) => {
   );
 };
 
-export default FolderIcon; 
+export default FolderIcon;

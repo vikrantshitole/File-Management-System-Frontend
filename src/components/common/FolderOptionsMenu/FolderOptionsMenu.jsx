@@ -2,20 +2,20 @@ import React, { useEffect, useRef } from 'react';
 import './FolderOptionsMenu.scss';
 import { FileUploadIcon, FolderPlusIcon, PencilIcon, TrashIcon } from '../icons';
 
-const FolderOptionsMenu = ({ 
-  isOpen, 
-  onClose, 
+const FolderOptionsMenu = ({
+  isOpen,
+  onClose,
   position,
   onEdit,
   onDelete,
   onCreateFolder,
   onUploadDocument,
-  isFolder
+  isFolder,
 }) => {
   const menuRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = event => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         onClose();
       }
@@ -38,42 +38,27 @@ const FolderOptionsMenu = ({
   };
 
   return (
-    <div 
-      className="folder-options-menu"
-      ref={menuRef}
-      style={menuStyle}
-    >
+    <div className="folder-options-menu" ref={menuRef} style={menuStyle}>
       {isFolder && (
-        <button 
-          className="folder-options-menu__item"
-          onClick={onEdit}
-      >
+        <button className="folder-options-menu__item" onClick={onEdit}>
           <PencilIcon size={18} />
           <span>Edit</span>
         </button>
       )}
 
-      <button 
-        className="folder-options-menu__item"
-        onClick={onDelete}
-      >
+      <button className="folder-options-menu__item" onClick={onDelete}>
         <TrashIcon size={18} />
         <span>Delete</span>
       </button>
 
       {isFolder && (
-        <button 
-          className="folder-options-menu__item"
-          onClick={onCreateFolder}
-          disabled={!isFolder}
-      >
+        <button className="folder-options-menu__item" onClick={onCreateFolder} disabled={!isFolder}>
           <FolderPlusIcon size={18} />
           <span>Create Folder</span>
         </button>
       )}
-    {
-      isFolder && (
-        <button 
+      {isFolder && (
+        <button
           className="folder-options-menu__item"
           onClick={onUploadDocument}
           disabled={!isFolder}
@@ -86,4 +71,4 @@ const FolderOptionsMenu = ({
   );
 };
 
-export default FolderOptionsMenu; 
+export default FolderOptionsMenu;

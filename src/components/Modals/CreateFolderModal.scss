@@ -1,5 +1,5 @@
 @use '../../styles/variables' as *;
-@use "sass:color";
+@use 'sass:color';
 
 .create-folder-form {
   display: flex;
@@ -19,7 +19,8 @@ label {
   color: $text-color;
 }
 
-input, textarea {
+input,
+textarea {
   padding: 10px 12px;
   border: 1px solid $border-color;
   border-radius: 4px;
@@ -54,7 +55,9 @@ input, textarea {
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   &-primary {
     background-color: $primary-color;
@@ -62,7 +65,7 @@ input, textarea {
     border: none;
 
     &:hover {
-      background-color: color.adjust($primary-color,$lightness: 5%);
+      background-color: color.adjust($primary-color, $lightness: 5%);
     }
   }
 
@@ -75,4 +78,4 @@ input, textarea {
       background-color: rgba(0, 0, 0, 0.05);
     }
   }
-} 
+}

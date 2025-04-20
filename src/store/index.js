@@ -5,8 +5,8 @@ import fileReducer from './slices/fileSlice';
 export const store = configureStore({
   reducer: {
     folder: folderReducer,
-    file: fileReducer
-  }
+    file: fileReducer,
+  },
 });
 
-export default store; 
+export default store;

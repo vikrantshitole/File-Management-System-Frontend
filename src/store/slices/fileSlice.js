@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentFile: null,
-  
 };
 
 const fileSlice = createSlice({
@@ -12,15 +11,13 @@ const fileSlice = createSlice({
     setCurrentFile: (state, action) => {
       state.currentFile = action.payload;
     },
-  }
+  },
 });
 
 // Export actions
-export const {
-  setCurrentFile
-} = fileSlice.actions;
+export const { setCurrentFile } = fileSlice.actions;
 
 // Export selectors
-export const selectCurrentFile = (state) => state.file.currentFile;
+export const selectCurrentFile = state => state.file.currentFile;
 
-export default fileSlice.reducer; 
+export default fileSlice.reducer;

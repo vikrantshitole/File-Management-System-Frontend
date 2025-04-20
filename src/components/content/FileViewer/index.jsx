@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './FileViewer.scss';
 import { useSelector } from 'react-redux';
 import { selectCurrentFile } from '../../../store/slices/fileSlice';
@@ -14,7 +14,7 @@ const FileViewer = () => {
       const extension = file.file_path.split('.').pop().toLowerCase();
       const fileUrl = import.meta.env.VITE_API_IMAGE_URL + file.file_path;
 
-      if (['txt', 'csv', 'json', 'log'].includes(extension)) {
+      if (['txt'].includes(extension)) {
         try {
           const response = await fetch(fileUrl);
           const text = await response.text();
@@ -32,8 +32,8 @@ const FileViewer = () => {
     return null;
   }
 
-  const extension = file.file_path.split('.').pop().toLowerCase();
-  const fileUrl = import.meta.env.VITE_API_IMAGE_URL + file.file_path;
+  const extension = useMemo(() => file.file_path.split('.').pop().toLowerCase(), [file]);
+  const fileUrl = useMemo(() => import.meta.env.VITE_API_IMAGE_URL + file.file_path, [file]);
 
   return (
     <div className="file-viewer">
@@ -51,11 +51,9 @@ const FileViewer = () => {
         />
       )}
 
-      {['txt'].includes(extension) && (
-        <pre className="file-viewer__text">{textContent}</pre>
-      )}
+      {['txt'].includes(extension) && <pre className="file-viewer__text">{textContent}</pre>}
 
-      {!['png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt','svg'].includes(extension) && (
+      {!['png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt', 'svg'].includes(extension) && (
         <div className="file-viewer__message">Unsupported file type</div>
       )}
     </div>

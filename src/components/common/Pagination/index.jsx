@@ -2,18 +2,12 @@ import React from 'react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import './Pagination.scss';
 
-const Pagination = ({ 
-  currentPage, 
-  totalPages, 
-  onPageChange,
-  className = ''
-}) => {
+const Pagination = ({ currentPage, totalPages, onPageChange, className = '' }) => {
   const pages = [];
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
   const getPageNumbers = () => {
-
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -25,7 +19,7 @@ const Pagination = ({
     return pages;
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = page => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
       onPageChange(page);
     }
@@ -49,17 +43,14 @@ const Pagination = ({
 
       {startPage > 1 && (
         <>
-          <button
-            className="pagination__button"
-            onClick={() => handlePageChange(1)}
-          >
+          <button className="pagination__button" onClick={() => handlePageChange(1)}>
             1
           </button>
           {startPage > 2 && <span className="pagination__ellipsis">...</span>}
         </>
       )}
 
-      {pageNumbers.map((page) => (
+      {pageNumbers.map(page => (
         <button
           key={page}
           className={`pagination__button ${
@@ -73,13 +64,8 @@ const Pagination = ({
 
       {endPage < totalPages && (
         <>
-          {endPage < totalPages - 1 && (
-            <span className="pagination__ellipsis">...</span>
-          )}
-          <button
-            className="pagination__button"
-            onClick={() => handlePageChange(totalPages)}
-          >
+          {endPage < totalPages - 1 && <span className="pagination__ellipsis">...</span>}
+          <button className="pagination__button" onClick={() => handlePageChange(totalPages)}>
             {totalPages}
           </button>
         </>
@@ -98,4 +84,4 @@ const Pagination = ({
   );
 };
 
-export default Pagination; 
+export default React.memo(Pagination);
