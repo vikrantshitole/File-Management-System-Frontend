@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import CreateFolderModal from '../../../Modals/CreateFolderModal/CreateFolderModal';
 import api from '../../../../api/axios';
 import { ChevronRight, Plus } from 'react-feather';
@@ -13,14 +13,14 @@ import {
 import { getParentFolderDetails } from '../../../../utils';
 import { selectCurrentFile, setCurrentFile } from '../../../../store/slices/fileSlice';
 
-const FolderTreeItem = ({ folder, level = 0 }) => {
+const FolderTreeItem = React.memo(({ folder, level = 0 }) => {
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const dispatch = useDispatch();
   const folders = useSelector(selectAllFolders);
   const currentFolder = useSelector(selectCurrentFolder);
   const currentFile = useSelector(selectCurrentFile);
 
-  const handleToggle = e => {
+  const handleToggle = useCallback(e => {
     e.stopPropagation();
     if (folder.type === 'folder') {
       dispatch(setCurrentFolderExpanded(folder));
@@ -34,58 +34,76 @@ const FolderTreeItem = ({ folder, level = 0 }) => {
       changeFile = getParentFolderDetails(folders, folder, folder.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));
-  };
+  }, [folder, currentFile, currentFolder, folders, dispatch]);
 
-  const handleAddFolder = e => {
+  const handleAddFolder = useCallback(e => {
     e.stopPropagation();
     setIsCreateFolderModalOpen(true);
-  };
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsCreateFolderModalOpen(false);
+  }, []);
+
+  const itemStyle = useMemo(() => ({ 
+    marginLeft: `${level * 1.5}rem` 
+  }), [level]);
+
+  const itemContent = useMemo(() => (
+    <div
+      className={`folder-tree__item-content ${folder.expanded ? 'folder-tree__item-content--expanded' : ''}`}
+      style={itemStyle}
+      onClick={handleToggle}
+    >
+      <div className="folder-tree__item-left">
+        <button className="folder-tree__toggle">
+          <ChevronRight size={14} strokeWidth={2.5} />
+        </button>
+        <div className="folder-tree__icon">
+          {folder.type === 'folder' ? <Vector size={18} /> : <GoogleDocs size={18} />}
+        </div>
+        <span className="folder-tree__label">{folder.name}</span>
+      </div>
+      <button
+        className="folder-tree__add"
+        disabled={folder.type === 'file'}
+        onClick={handleAddFolder}
+        title="Add Folder"
+      >
+        <Plus size={16} strokeWidth={2.5} />
+      </button>
+    </div>
+  ), [folder, itemStyle, handleToggle, handleAddFolder]);
+
+  const childrenContent = useMemo(() => {
+    if (!folder.expanded || !folder.children) return null;
+    
+    return (
+      <div className="folder-tree__children">
+        {folder.children.map(child => (
+          <FolderTreeItem
+            key={child.type === 'folder' ? child.id : child.id + child.file_path}
+            folder={child}
+            level={level + 1}
+          />
+        ))}
+      </div>
+    );
+  }, [folder, level]);
 
   return (
     <div className="folder-tree__item">
-      <div
-        className={`folder-tree__item-content ${folder.expanded ? 'folder-tree__item-content--expanded' : ''}`}
-        style={{ marginLeft: `${level * 1.5}rem` }}
-        onClick={handleToggle}
-      >
-        <div className="folder-tree__item-left">
-          <button className="folder-tree__toggle">
-            <ChevronRight size={14} strokeWidth={2.5} />
-          </button>
-          <div className="folder-tree__icon">
-            {folder.type === 'folder' ? <Vector size={18} /> : <GoogleDocs size={18} />}
-          </div>
-          <span className="folder-tree__label">{folder.name}</span>
-        </div>
-        {/* {isHovered && ( */}
-        <button
-          className="folder-tree__add"
-          disabled={folder.type === 'file'}
-          onClick={handleAddFolder}
-          title="Add Folder"
-        >
-          <Plus size={16} strokeWidth={2.5} />
-        </button>
-        {/* )} */}
-      </div>
-      {folder.expanded && folder.children && (
-        <div className="folder-tree__children">
-          {folder.children.map(child => (
-            <FolderTreeItem
-              key={child.type === 'folder' ? child.id : child.id + child.file_path}
-              folder={child}
-              level={level + 1}
-            />
-          ))}
-        </div>
-      )}
+      {itemContent}
+      {childrenContent}
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen}
-        onClose={() => setIsCreateFolderModalOpen(false)}
+        onClose={handleCloseModal}
         folder={folder}
-        // onCreateFolder={handleCreateFolderSubmit}
       />
     </div>
   );
-};
+});
+
+FolderTreeItem.displayName = 'FolderTreeItem';
+
 export default FolderTreeItem;

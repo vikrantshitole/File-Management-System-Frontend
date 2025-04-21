@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { Filter, Plus, Upload } from 'react-feather';
 import { Vector } from '../../common/icons';
 import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
@@ -7,7 +7,7 @@ import './Header.scss';
 import Breadcrumb from '../../common/Breadcrumb';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 
-const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
+const Header = React.memo(({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
@@ -15,34 +15,61 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
   const dropdownRef = useRef(null);
   const filterButtonRef = useRef(null);
 
-  const handleClickOutside = event => {
+  const handleClickOutside = useCallback(event => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
-  };
+  }, []);
 
-  const handleCreateFolder = () => {
+  const handleCreateFolder = useCallback(() => {
     setIsCreateFolderModalOpen(true);
     setIsDropdownOpen(false);
-  };
+  }, []);
 
-  const handleUploadDocument = () => {
+  const handleUploadDocument = useCallback(() => {
     setIsUploadFileModalOpen(true);
     setIsDropdownOpen(false);
-  };
+  }, []);
 
-  const handlePlusClick = () => {
+  const handlePlusClick = useCallback(() => {
     if (isDropdownOpen) {
       setIsCreateFolderModalOpen(true);
       setIsDropdownOpen(false);
     } else {
       setIsDropdownOpen(true);
     }
-  };
+  }, [isDropdownOpen]);
 
-  const handleFilterClick = () => {
+  const handleFilterClick = useCallback(() => {
     setIsFiltersOpen(!isFiltersOpen);
-  };
+  }, [isFiltersOpen]);
+
+  const handleCloseCreateFolderModal = useCallback(() => {
+    setIsCreateFolderModalOpen(false);
+  }, []);
+
+  const handleCloseUploadModal = useCallback(() => {
+    setIsUploadFileModalOpen(false);
+  }, []);
+
+  const handleCloseFilters = useCallback(() => {
+    setIsFiltersOpen(false);
+  }, []);
+
+  const dropdownMenu = useMemo(() => (
+    isDropdownOpen && (
+      <div className="header__dropdown-menu">
+        <button className="header__dropdown-item" onClick={handleCreateFolder}>
+          <Vector size={16} />
+          <span>Create Folder</span>
+        </button>
+        <button className="header__dropdown-item" onClick={handleUploadDocument}>
+          <Upload size={16} />
+          <span>Upload Document</span>
+        </button>
+      </div>
+    )
+  ), [isDropdownOpen, handleCreateFolder, handleUploadDocument]);
 
   return (
     <header className="header">
@@ -62,38 +89,32 @@ const Header = ({ setFilterData, sideBarOpen, setSideBarOpen }) => {
           >
             <Plus size={18} color={'#ffffff'} fill="#ffffff" fontSize={18} />
           </button>
-          {isDropdownOpen && (
-            <div className="header__dropdown-menu">
-              <button className="header__dropdown-item" onClick={handleCreateFolder}>
-                <Vector size={16} />
-                <span>Create Folder</span>
-              </button>
-              <button className="header__dropdown-item" onClick={handleUploadDocument}>
-                <Upload size={16} />
-                <span>Upload Document</span>
-              </button>
-            </div>
-          )}
+          {dropdownMenu}
         </div>
       </div>
 
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen}
-        onClose={() => setIsCreateFolderModalOpen(false)}
-        // onCreateFolder={handleCreateFolderSubmit}
+        onClose={handleCloseCreateFolderModal}
       />
       <UploadDocumentModal
         isOpen={isUploadFileModalOpen}
-        onClose={() => setIsUploadFileModalOpen(false)}
+        onClose={handleCloseUploadModal}
       />
       <FiltersPopup
         isOpen={isFiltersOpen}
-        onClose={() => setIsFiltersOpen(false)}
+        onClose={handleCloseFilters}
         anchorRef={filterButtonRef}
         setFilterData={setFilterData}
       />
     </header>
   );
-};
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.sideBarOpen === nextProps.sideBarOpen
+  );
+});
+
+Header.displayName = 'Header';
 
 export default Header;
