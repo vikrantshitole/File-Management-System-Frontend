@@ -38,23 +38,24 @@ const FileList = React.memo(({ files }) => {
     setFile(null);
   }, []);
 
-  const tableHeaders = useMemo(() => (
-    <tr>
-      <th className="file-list__header file-list__header--icon"></th>
-      <th className="file-list__header file-list__header--name">Name</th>
-      <th className="file-list__header file-list__header--description">Description</th>
-      <th className="file-list__header file-list__header--date">Created At</th>
-      <th className="file-list__header file-list__header--date">Updated At</th>
-      <th className="file-list__header file-list__header--actions"></th>
-    </tr>
-  ), []);
+  const tableHeaders = useMemo(
+    () => (
+      <tr>
+        <th className="file-list__header file-list__header--icon"></th>
+        <th className="file-list__header file-list__header--name">Name</th>
+        <th className="file-list__header file-list__header--description">Description</th>
+        <th className="file-list__header file-list__header--date">Created At</th>
+        <th className="file-list__header file-list__header--date">Updated At</th>
+        <th className="file-list__header file-list__header--actions"></th>
+      </tr>
+    ),
+    []
+  );
 
   return (
     <div className="file-list">
       <table className="file-list__table">
-        <thead>
-          {tableHeaders}
-        </thead>
+        <thead>{tableHeaders}</thead>
         <tbody>
           {files.map(child => (
             <FileListItem

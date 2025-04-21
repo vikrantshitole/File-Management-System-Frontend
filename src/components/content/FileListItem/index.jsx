@@ -15,142 +15,153 @@ import {
 import { getParentFolderDetails, formatDate } from '../../../utils';
 import DeleteConfirmationModal from '../../Modals/DeleteConfirmationModal/DeleteConfirmationModal';
 
-const FileListItem = React.memo(({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const moreButtonRef = useRef(null);
-  const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
-  const dispatch = useDispatch();
-  const currentFolder = useSelector(selectCurrentFolder);
-  const folders = useSelector(selectAllFolders);
-  const currentFile = useSelector(selectCurrentFile);
-  const isFolder = file.type === 'folder';
+const FileListItem = React.memo(
+  ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const moreButtonRef = useRef(null);
+    const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
+    const dispatch = useDispatch();
+    const currentFolder = useSelector(selectCurrentFolder);
+    const folders = useSelector(selectAllFolders);
+    const currentFile = useSelector(selectCurrentFile);
+    const isFolder = file.type === 'folder';
 
-  const handleMoreClick = useCallback(e => {
-    e.stopPropagation();
-    setIsMenuOpen(true);
-  }, []);
+    const handleMoreClick = useCallback(e => {
+      e.stopPropagation();
+      setIsMenuOpen(true);
+    }, []);
 
-  const handleEdit = useCallback(() => {
-    onUpdateFolder(file);
-    setIsMenuOpen(false);
-  }, [file, onUpdateFolder]);
+    const handleEdit = useCallback(() => {
+      onUpdateFolder(file);
+      setIsMenuOpen(false);
+    }, [file, onUpdateFolder]);
 
-  const handleDelete = useCallback(() => {
-    setIsMenuOpen(false);
-    setIsDeleteConfirmationModalOpen(true);
-  }, []);
+    const handleDelete = useCallback(() => {
+      setIsMenuOpen(false);
+      setIsDeleteConfirmationModalOpen(true);
+    }, []);
 
-  const handleCreateFolder = useCallback(() => {
-    onCreateFolder(file);
-    setIsMenuOpen(false);
-  }, [file, onCreateFolder]);
+    const handleCreateFolder = useCallback(() => {
+      onCreateFolder(file);
+      setIsMenuOpen(false);
+    }, [file, onCreateFolder]);
 
-  const handleUploadDocument = useCallback(() => {
-    setIsMenuOpen(false);
-    onUploadFile(file);
-  }, [file, onUploadFile]);
+    const handleUploadDocument = useCallback(() => {
+      setIsMenuOpen(false);
+      onUploadFile(file);
+    }, [file, onUploadFile]);
 
-  const menuPosition = useMemo(() => {
-    if (!moreButtonRef.current) return { x: 0, y: 0 };
-    const rect = moreButtonRef.current.getBoundingClientRect();
-    return {
-      x: rect.right,
-      y: rect.top + 20,
-    };
-  }, [moreButtonRef.current]);
+    const menuPosition = useMemo(() => {
+      if (!moreButtonRef.current) return { x: 0, y: 0 };
+      const rect = moreButtonRef.current.getBoundingClientRect();
+      return {
+        x: rect.right,
+        y: rect.top + 20,
+      };
+    }, [moreButtonRef.current]);
 
-  const handleIconClick = useCallback(() => {
-    if (isFolder) {
-      dispatch(setCurrentFolderExpanded(file));
-    }
-    if (file.type === 'file') {
-      const newFile = file.id === currentFile?.id ? null : file;
-      dispatch(setCurrentFile(newFile));
-    }
-    let changeFile = file;
-    if ((file.id === currentFolder?.id || file.expanded) && file.type === 'folder') {
-      changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
-    }
-    dispatch(setSelectedFolder(changeFile));
-  }, [file, currentFile, currentFolder, folders, dispatch, isFolder]);
+    const handleIconClick = useCallback(() => {
+      if (isFolder) {
+        dispatch(setCurrentFolderExpanded(file));
+      }
+      if (file.type === 'file') {
+        const newFile = file.id === currentFile?.id ? null : file;
+        dispatch(setCurrentFile(newFile));
+      }
+      let changeFile = file;
+      if ((file.id === currentFolder?.id || file.expanded) && file.type === 'folder') {
+        changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
+      }
+      dispatch(setSelectedFolder(changeFile));
+    }, [file, currentFile, currentFolder, folders, dispatch, isFolder]);
 
-  const paddingStyle = useMemo(() => ({ 
-    paddingLeft: `${level ? level * 30 : 10}px` 
-  }), [level]);
+    const paddingStyle = useMemo(
+      () => ({
+        paddingLeft: `${level ? level * 30 : 10}px`,
+      }),
+      [level]
+    );
 
-  const cursorStyle = useMemo(() => ({ 
-    cursor: isFolder ? 'pointer' : 'default' 
-  }), [isFolder]);
+    const cursorStyle = useMemo(
+      () => ({
+        cursor: isFolder ? 'pointer' : 'default',
+      }),
+      [isFolder]
+    );
 
-  const badgeStyle = useMemo(() => ({ 
-    left: `${level ? level * 28 - file.level : 5}px` 
-  }), [level, file.level]);
+    const badgeStyle = useMemo(
+      () => ({
+        left: `${level ? level * 28 - file.level : 5}px`,
+      }),
+      [level, file.level]
+    );
 
-  return (
-    <>
-      <tr className="file-list__row" onClick={handleIconClick}>
-        <td className="file-list__cell file-list__cell--icon" style={paddingStyle}>
-          <span style={cursorStyle}>
-            {file.type === 'folder' ? (
-              <>
-                <span className="badge" style={badgeStyle}>
-                  {file.subfolder_count}
-                </span>
-                <Vector size={20} />
-              </>
-            ) : (
-              <GoogleDocs size={20} />
-            )}
-          </span>
-        </td>
-        <td className="file-list__cell file-list__cell--name">{file.name}</td>
-        <td className="file-list__cell file-list__cell--description">{file.description}</td>
-        <td className="file-list__cell file-list__cell--date">{formatDate(file.created_at)}</td>
-        <td className="file-list__cell file-list__cell--date">{formatDate(file.updated_at)}</td>
-        <td className="file-list__cell file-list__cell--actions">
-          <button
-            className="file-list__action-button"
-            ref={moreButtonRef}
-            onClick={handleMoreClick}
-          >
-            <MoreVertical size={16} />
-          </button>
+    return (
+      <>
+        <tr className="file-list__row" onClick={handleIconClick}>
+          <td className="file-list__cell file-list__cell--icon" style={paddingStyle}>
+            <span style={cursorStyle}>
+              {file.type === 'folder' ? (
+                <>
+                  <span className="badge" style={badgeStyle}>
+                    {file.subfolder_count}
+                  </span>
+                  <Vector size={20} />
+                </>
+              ) : (
+                <GoogleDocs size={20} />
+              )}
+            </span>
+          </td>
+          <td className="file-list__cell file-list__cell--name">{file.name}</td>
+          <td className="file-list__cell file-list__cell--description">{file.description}</td>
+          <td className="file-list__cell file-list__cell--date">{formatDate(file.created_at)}</td>
+          <td className="file-list__cell file-list__cell--date">{formatDate(file.updated_at)}</td>
+          <td className="file-list__cell file-list__cell--actions">
+            <button
+              className="file-list__action-button"
+              ref={moreButtonRef}
+              onClick={handleMoreClick}
+            >
+              <MoreVertical size={16} />
+            </button>
 
-          <FolderOptionsMenu
-            isOpen={isMenuOpen}
-            isFolder={isFolder}
-            onClose={() => setIsMenuOpen(false)}
-            position={menuPosition}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onCreateFolder={handleCreateFolder}
-            onUploadDocument={handleUploadDocument}
-          />
-        </td>
-      </tr>
+            <FolderOptionsMenu
+              isOpen={isMenuOpen}
+              isFolder={isFolder}
+              onClose={() => setIsMenuOpen(false)}
+              position={menuPosition}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onCreateFolder={handleCreateFolder}
+              onUploadDocument={handleUploadDocument}
+            />
+          </td>
+        </tr>
 
-      {file.expanded &&
-        file.children.map(child => (
-          <FileListItem
-            key={child.type === 'folder' ? child.id : child.id + child.file_path}
-            file={child}
-            level={level + 1}
-            onUploadFile={onUploadFile}
-            onCreateFolder={onCreateFolder}
-            onUpdateFolder={onUpdateFolder}
-          />
-        ))}
+        {file.expanded &&
+          file.children.map(child => (
+            <FileListItem
+              key={child.type === 'folder' ? child.id : child.id + child.file_path}
+              file={child}
+              level={level + 1}
+              onUploadFile={onUploadFile}
+              onCreateFolder={onCreateFolder}
+              onUpdateFolder={onUpdateFolder}
+            />
+          ))}
 
-      <DeleteConfirmationModal
-        isOpen={isDeleteConfirmationModalOpen}
-        onClose={() => setIsDeleteConfirmationModalOpen(false)}
-        itemName={file.name}
-        itemType={file.type}
-        itemId={file.id}
-      />
-    </>
-  );
-});
+        <DeleteConfirmationModal
+          isOpen={isDeleteConfirmationModalOpen}
+          onClose={() => setIsDeleteConfirmationModalOpen(false)}
+          itemName={file.name}
+          itemType={file.type}
+          itemId={file.id}
+        />
+      </>
+    );
+  }
+);
 
 FileListItem.displayName = 'FileListItem';
 

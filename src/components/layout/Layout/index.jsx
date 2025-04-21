@@ -13,17 +13,20 @@ const Layout = React.memo(() => {
   const [filterData, setFilterData] = useState({});
   const [sideBarOpen, setSideBarOpen] = useState(true);
 
-  const handleSetFilterData = useCallback((data) => {
+  const handleSetFilterData = useCallback(data => {
     setFilterData(data);
   }, []);
 
-  const handleSetSideBarOpen = useCallback((isOpen) => {
+  const handleSetSideBarOpen = useCallback(isOpen => {
     setSideBarOpen(isOpen);
   }, []);
 
-  const mainStyle = useMemo(() => ({
-    width: file ? '80%' : '100%'
-  }), [file]);
+  const mainStyle = useMemo(
+    () => ({
+      width: file ? '80%' : '100%',
+    }),
+    [file]
+  );
 
   return (
     <div className="layout">
