@@ -74,7 +74,6 @@ const MainContent = React.memo(({ filterData }) => {
     </div>
   );
 }, (prevProps, nextProps) => {
-  // Custom comparison function for memo
   return (
     prevProps.filterData.name === nextProps.filterData.name &&
     prevProps.filterData.description === nextProps.filterData.description &&

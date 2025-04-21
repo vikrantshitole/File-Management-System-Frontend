@@ -95,10 +95,7 @@
       color: $primary-color;
     }
   }
-
-  // &__item-content:hover &__add {
-  //   opacity: 1;
-  // }
+  
   &__item::before {
     content: '';
     position: absolute;
@@ -127,7 +124,6 @@
     }
   }
 
-  // Don’t show for root
   &--root::before {
     display: none;
   }

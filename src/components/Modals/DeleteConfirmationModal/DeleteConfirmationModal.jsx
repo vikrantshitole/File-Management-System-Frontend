@@ -26,7 +26,7 @@ const DeleteConfirmationModal = React.memo(({
       .catch(error => {
         console.error('Error deleting file:', error);
       });
-    // onConfirm();
+
   }, [itemType, itemId, onClose, dispatch]);
 
   const modalFooter = useMemo(() => (

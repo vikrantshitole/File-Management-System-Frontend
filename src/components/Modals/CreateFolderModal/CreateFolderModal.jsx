@@ -55,7 +55,6 @@ const CreateFolderModal = React.memo(({ isOpen, onClose, isUpdate = false, folde
   };
 
   const handleCancel = () => {
-    // Reset form
     setName('');
     setDescription('');
     setErrors({});

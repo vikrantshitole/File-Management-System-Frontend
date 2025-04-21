@@ -120,7 +120,6 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
           } catch (error) {
             console.error('Error processing progress data:', error);
             if (lastProgressData && lastProgressData.progress === 100) {
-              // setProgressData(lastProgressData);
               handleCompletion();
             } else {
               setError('Error processing upload progress');

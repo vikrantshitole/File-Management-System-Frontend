@@ -18,7 +18,7 @@ const Toast = React.memo(() => {
   }), []);
 
   return <ToastContainer {...toastConfig} />;
-}, () => true); // Always return true since this component doesn't depend on props
+}, () => true);
 
 Toast.displayName = 'Toast';
 

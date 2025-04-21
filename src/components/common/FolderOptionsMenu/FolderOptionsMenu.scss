@@ -8,7 +8,7 @@
   min-width: 200px;
   padding: 6px;
   z-index: $z-index-popover;
-  transform: translate(-100%, 0); // Position to the left of the click
+  transform: translate(-100%, 0);
   animation: menuEnter 0.15s ease;
 
   &__item {
