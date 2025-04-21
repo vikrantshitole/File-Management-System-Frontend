@@ -110,9 +110,7 @@ const Header = React.memo(({ setFilterData, sideBarOpen, setSideBarOpen }) => {
     </header>
   );
 }, (prevProps, nextProps) => {
-  return (
-    prevProps.sideBarOpen === nextProps.sideBarOpen
-  );
+  return prevProps.sideBarOpen === nextProps.sideBarOpen;
 });
 
 Header.displayName = 'Header';

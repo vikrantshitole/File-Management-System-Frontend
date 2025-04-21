@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../Modal';
+import { FolderPlus } from 'react-feather';
 import './CreateFolderModal.scss';
-import { useDispatch } from 'react-redux';
 import { setRefreshData } from '../../../store/slices/folderSlice';
+import { useDispatch } from 'react-redux';
 import api from '../../../api/axios';
-import { formatDate } from '../../../utils';
 
 const CreateFolderModal = React.memo(({ isOpen, onClose, isUpdate = false, folder }) => {
   const [name, setName] = useState(folder?.name || '');

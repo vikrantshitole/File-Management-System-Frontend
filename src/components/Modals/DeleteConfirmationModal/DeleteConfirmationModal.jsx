@@ -9,7 +9,6 @@ import api from '../../../api/axios';
 const DeleteConfirmationModal = React.memo(({
   isOpen,
   onClose,
-  onConfirm,
   itemName,
   itemType = 'file', // 'file' or 'folder'
   itemId,
@@ -26,7 +25,6 @@ const DeleteConfirmationModal = React.memo(({
       .catch(error => {
         console.error('Error deleting file:', error);
       });
-
   }, [itemType, itemId, onClose, dispatch]);
 
   const modalFooter = useMemo(() => (
