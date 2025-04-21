@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Toast.scss';
 
-const Toast = () => {
-  return (
-    <ToastContainer
-      position="top-right"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-    />
-  );
-};
+const Toast = React.memo(() => {
+  const toastConfig = useMemo(() => ({
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    newestOnTop: true,
+    closeOnClick: true,
+    rtl: false,
+    pauseOnFocusLoss: true,
+    draggable: true,
+    pauseOnHover: true,
+    theme: "light"
+  }), []);
+
+  return <ToastContainer {...toastConfig} />;
+}, () => true); // Always return true since this component doesn't depend on props
+
+Toast.displayName = 'Toast';
 
 export default Toast;

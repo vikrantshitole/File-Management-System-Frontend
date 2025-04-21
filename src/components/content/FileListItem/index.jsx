@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { MoreVertical } from 'react-feather';
 import FolderOptionsMenu from '../../common/FolderOptionsMenu/FolderOptionsMenu';
 import { Vector, GoogleDocs } from '../../common/icons';
@@ -15,7 +15,7 @@ import {
 import { getParentFolderDetails, formatDate } from '../../../utils';
 import DeleteConfirmationModal from '../../Modals/DeleteConfirmationModal/DeleteConfirmationModal';
 
-const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder }) => {
+const FileListItem = React.memo(({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const moreButtonRef = useRef(null);
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
@@ -25,42 +25,41 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
   const currentFile = useSelector(selectCurrentFile);
   const isFolder = file.type === 'folder';
 
-  const handleMoreClick = e => {
+  const handleMoreClick = useCallback(e => {
     e.stopPropagation();
     setIsMenuOpen(true);
-  };
+  }, []);
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     onUpdateFolder(file);
     setIsMenuOpen(false);
-  };
+  }, [file, onUpdateFolder]);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setIsMenuOpen(false);
     setIsDeleteConfirmationModalOpen(true);
-  };
+  }, []);
 
-  const handleCreateFolder = () => {
+  const handleCreateFolder = useCallback(() => {
     onCreateFolder(file);
     setIsMenuOpen(false);
-  };
+  }, [file, onCreateFolder]);
 
-  const handleUploadDocument = () => {
+  const handleUploadDocument = useCallback(() => {
     setIsMenuOpen(false);
     onUploadFile(file);
-  };
+  }, [file, onUploadFile]);
 
-  const getMenuPosition = () => {
+  const menuPosition = useMemo(() => {
     if (!moreButtonRef.current) return { x: 0, y: 0 };
-
     const rect = moreButtonRef.current.getBoundingClientRect();
     return {
       x: rect.right,
       y: rect.top + 20,
     };
-  };
+  }, [moreButtonRef.current]);
 
-  const handleIconClick = () => {
+  const handleIconClick = useCallback(() => {
     if (isFolder) {
       dispatch(setCurrentFolderExpanded(file));
     }
@@ -73,22 +72,28 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
       changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
     }
     dispatch(setSelectedFolder(changeFile));
-  };
+  }, [file, currentFile, currentFolder, folders, dispatch, isFolder]);
+
+  const paddingStyle = useMemo(() => ({ 
+    paddingLeft: `${level ? level * 30 : 10}px` 
+  }), [level]);
+
+  const cursorStyle = useMemo(() => ({ 
+    cursor: isFolder ? 'pointer' : 'default' 
+  }), [isFolder]);
+
+  const badgeStyle = useMemo(() => ({ 
+    left: `${level ? level * 28 - file.level : 5}px` 
+  }), [level, file.level]);
 
   return (
     <>
       <tr className="file-list__row" onClick={handleIconClick}>
-        <td
-          className="file-list__cell file-list__cell--icon"
-          style={{ paddingLeft: `${level ? level * 30 : 10}px` }}
-        >
-          <span style={{ cursor: isFolder ? 'pointer' : 'default' }}>
+        <td className="file-list__cell file-list__cell--icon" style={paddingStyle}>
+          <span style={cursorStyle}>
             {file.type === 'folder' ? (
               <>
-                <span
-                  className="badge"
-                  style={{ left: `${level ? level * 28 - file.level : 5}px` }}
-                >
+                <span className="badge" style={badgeStyle}>
                   {file.subfolder_count}
                 </span>
                 <Vector size={20} />
@@ -115,7 +120,7 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
             isOpen={isMenuOpen}
             isFolder={isFolder}
             onClose={() => setIsMenuOpen(false)}
-            position={getMenuPosition()}
+            position={menuPosition}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onCreateFolder={handleCreateFolder}
@@ -127,7 +132,7 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
       {file.expanded &&
         file.children.map(child => (
           <FileListItem
-            key={isFolder ? child.id : child.id + child.file_path}
+            key={child.type === 'folder' ? child.id : child.id + child.file_path}
             file={child}
             level={level + 1}
             onUploadFile={onUploadFile}
@@ -145,6 +150,8 @@ const FileListItem = ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateF
       />
     </>
   );
-};
+});
+
+FileListItem.displayName = 'FileListItem';
 
 export default FileListItem;

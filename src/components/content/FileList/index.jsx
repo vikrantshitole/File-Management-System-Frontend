@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import './FileList.scss';
 import FileListItem from '../FileListItem';
 import UploadDocumentModal from '../../Modals/UploadDocumentModal/UploadDocumentModal';
 import CreateFolderModal from '../../Modals/CreateFolderModal/CreateFolderModal';
 
-const FileList = ({ files }) => {
+const FileList = React.memo(({ files }) => {
   const [isUploadFileModalOpen, setIsUploadFileModalOpen] = useState(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
@@ -27,18 +27,33 @@ const FileList = ({ files }) => {
     setIsCreateFolderModalOpen(true);
   }, []);
 
+  const handleCloseUploadModal = useCallback(() => {
+    setIsUploadFileModalOpen(false);
+    setFile(null);
+  }, []);
+
+  const handleCloseCreateModal = useCallback(() => {
+    setIsCreateFolderModalOpen(false);
+    setIsUpdateFolder(false);
+    setFile(null);
+  }, []);
+
+  const tableHeaders = useMemo(() => (
+    <tr>
+      <th className="file-list__header file-list__header--icon"></th>
+      <th className="file-list__header file-list__header--name">Name</th>
+      <th className="file-list__header file-list__header--description">Description</th>
+      <th className="file-list__header file-list__header--date">Created At</th>
+      <th className="file-list__header file-list__header--date">Updated At</th>
+      <th className="file-list__header file-list__header--actions"></th>
+    </tr>
+  ), []);
+
   return (
     <div className="file-list">
       <table className="file-list__table">
         <thead>
-          <tr>
-            <th className="file-list__header file-list__header--icon"></th>
-            <th className="file-list__header file-list__header--name">Name</th>
-            <th className="file-list__header file-list__header--description">Description</th>
-            <th className="file-list__header file-list__header--date">Created At</th>
-            <th className="file-list__header file-list__header--date">Updated At</th>
-            <th className="file-list__header file-list__header--actions"></th>
-          </tr>
+          {tableHeaders}
         </thead>
         <tbody>
           {files.map(child => (
@@ -56,20 +71,18 @@ const FileList = ({ files }) => {
       <UploadDocumentModal
         isOpen={isUploadFileModalOpen}
         folderId={file?.id}
-        onClose={() => setIsUploadFileModalOpen(false)}
+        onClose={handleCloseUploadModal}
       />
       <CreateFolderModal
         isOpen={isCreateFolderModalOpen || isUpdateFolder}
         folder={file}
         isUpdate={isUpdateFolder}
-        onClose={() => {
-          setIsCreateFolderModalOpen(false);
-          setIsUpdateFolder(false);
-          setFile(null);
-        }}
+        onClose={handleCloseCreateModal}
       />
     </div>
   );
-};
+});
+
+FileList.displayName = 'FileList';
 
 export default FileList;

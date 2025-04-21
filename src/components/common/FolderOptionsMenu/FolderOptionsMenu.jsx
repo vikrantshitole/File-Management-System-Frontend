@@ -71,4 +71,4 @@ const FolderOptionsMenu = ({
   );
 };
 
-export default FolderOptionsMenu;
+export default React.memo(FolderOptionsMenu);

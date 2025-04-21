@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import './Pagination.scss';
 
-const Pagination = ({ currentPage, totalPages, onPageChange, className = '' }) => {
-  const pages = [];
+const Pagination = React.memo(({ currentPage, totalPages, onPageChange, className = '' }) => {
   const maxVisiblePages = 5;
-  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-  const getPageNumbers = () => {
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+
+  const { startPage, endPage, pageNumbers } = useMemo(() => {
+    let start = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let end = Math.min(totalPages, start + maxVisiblePages - 1);
+    
+    if (end - start + 1 < maxVisiblePages) {
+      start = Math.max(1, end - maxVisiblePages + 1);
     }
 
-    for (let i = startPage; i <= endPage; i++) {
+    const pages = [];
+    for (let i = start; i <= end; i++) {
       pages.push(i);
     }
 
-    return pages;
-  };
+    return { startPage: start, endPage: end, pageNumbers: pages };
+  }, [currentPage, totalPages]);
 
-  const handlePageChange = page => {
+  const handlePageChange = useCallback(page => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
       onPageChange(page);
     }
-  };
+  }, [currentPage, totalPages, onPageChange]);
 
   if (totalPages <= 1) return null;
-
-  const pageNumbers = getPageNumbers();
 
   return (
     <div className={`pagination ${className}`}>
@@ -82,6 +82,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = '' }) =
       </button>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.currentPage === nextProps.currentPage &&
+    prevProps.totalPages === nextProps.totalPages &&
+    prevProps.className === nextProps.className
+  );
+});
 
-export default React.memo(Pagination);
+Pagination.displayName = 'Pagination';
+
+export default Pagination;
