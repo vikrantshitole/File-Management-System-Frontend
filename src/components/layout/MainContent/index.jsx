@@ -25,6 +25,8 @@ const MainContent = React.memo(
       const params = new URLSearchParams();
       params.append('page', currentPage);
       params.append('limit', itemsPerPage);
+      params.append('sort_by', 'updated_at');
+      params.append('sort_order', 'desc');
 
       const { name, description, date } = filterData;
       if (name) params.append('name', name);
