@@ -1,8 +1,8 @@
 import React, { Fragment, useMemo, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import { selectAllFolders, selectCurrentFolder } from '../../../store/slices/folderSlice';
+import { selectAllFolders, selectCurrentFolder } from '@store/slices/folderSlice';
 import { useSelector } from 'react-redux';
-import { getbreadcrumb } from '../../../utils';
+import { getbreadcrumb } from '@utils';
 
 const Breadcrumb = React.memo(
   ({ setSideBarOpen, sideBarOpen }) => {

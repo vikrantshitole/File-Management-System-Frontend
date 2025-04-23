@@ -1,5 +1,5 @@
 import React from 'react';
-import './FileIcon.scss';
+import '@styles/icons/FileIcon.scss';
 
 const FileIcon = ({ size = 26, color = 'currentColor', className = '' }) => {
   return (

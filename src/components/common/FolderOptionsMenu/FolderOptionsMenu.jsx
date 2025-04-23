@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import './FolderOptionsMenu.scss';
-import { FileUploadIcon, FolderPlusIcon, PencilIcon, TrashIcon } from '../icons';
+import '@styles/FolderOptionsMenu.scss';
+import { FileUploadIcon, FolderPlusIcon, PencilIcon, TrashIcon } from '@components/common/icons';
 
 const FolderOptionsMenu = ({
   isOpen,

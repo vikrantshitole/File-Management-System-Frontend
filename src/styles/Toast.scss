@@ -1,0 +1,41 @@
+@use '@styles/variables' as *;
+
+.Toastify__toast {
+  font-family: inherit;
+  border-radius: $border-radius-sm;
+  padding: $spacing-md;
+  box-shadow: $shadow-md;
+
+  &--success {
+    background-color: #28a745;
+    color: white;
+  }
+
+  &--error {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  &--warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  &--info {
+    background-color: #17a2b8;
+    color: white;
+  }
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.Toastify__close-button {
+  color: white;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}

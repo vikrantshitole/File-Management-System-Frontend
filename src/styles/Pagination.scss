@@ -1,0 +1,57 @@
+@use 'sass:color';
+@use '@styles/variables' as *;
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  user-select: none;
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-sm;
+    background-color: $background-color;
+    color: var(--text-color);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(&--disabled) {
+      background-color: color.adjust($background-color, $lightness: -10%);
+      border-color: $primary-color;
+    }
+
+    &--active {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: white;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--prev,
+    &--next {
+      padding: 0 0.75rem;
+    }
+  }
+
+  &__ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    color: var(--text-secondary);
+  }
+}

@@ -1,0 +1,53 @@
+@use '@styles/variables' as *;
+
+.main-content {
+  flex: 1;
+  padding: $spacing-md;
+  background-color: $background-color;
+  overflow-y: auto;
+  min-height: 0;
+  position: relative;
+  width: 100%;
+
+  @media (min-width: 576px) {
+    padding: $spacing-lg;
+  }
+
+  @media (min-width: 768px) {
+    padding: $spacing-xl;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+
+    @media (min-width: 768px) {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: $spacing-lg;
+
+    @media (min-width: 768px) {
+      overflow-x: visible;
+    }
+  }
+
+  .pagination {
+    margin-top: $spacing-lg;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+
+    @media (min-width: 576px) {
+      justify-content: flex-end;
+    }
+  }
+}

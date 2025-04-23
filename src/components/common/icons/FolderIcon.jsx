@@ -1,5 +1,5 @@
 import React from 'react';
-import './FolderIcon.scss';
+import '@styles/icons/FolderIcon.scss';
 
 const FolderIcon = ({ size = 'medium', color = '#000000', className = '' }) => {
   const getSize = () => {

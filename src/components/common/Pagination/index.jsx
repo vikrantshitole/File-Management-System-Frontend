@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import './Pagination.scss';
+import '@styles/Pagination.scss';
 
 const Pagination = React.memo(
   ({ currentPage, totalPages, onPageChange, className = '' }) => {
