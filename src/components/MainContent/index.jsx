@@ -46,7 +46,7 @@ const MainContent = React.memo(
           setPagination(prev => ({
             ...prev,
             page: paginationData.page,
-            totalPages: paginationData.totalPages,
+            totalPages: paginationData.total_pages,
             totalItems: paginationData.total,
             itemsPerPage: paginationData.limit,
           }));

@@ -31,7 +31,7 @@ const FolderTreeItem = React.memo(({ folder, level = 0 }) => {
       }
       let changeFile = folder;
       if ((folder.id === currentFolder?.id || folder.expanded) && folder.type === 'folder') {
-        changeFile = getParentFolderDetails(folders, folder, folder.path.split(',').map(Number));
+        changeFile = getParentFolderDetails(folders, folder, folder.path.split(','));
       }
       dispatch(setSelectedFolder(changeFile));
     },

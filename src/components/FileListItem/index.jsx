@@ -59,20 +59,24 @@ const FileListItem = React.memo(
       };
     }, [moreButtonRef.current]);
 
-    const handleIconClick = useCallback(() => {
-      if (isFolder) {
-        dispatch(setCurrentFolderExpanded(file));
-      }
-      if (file.type === 'file') {
-        const newFile = file.id === currentFile?.id ? null : file;
-        dispatch(setCurrentFile(newFile));
-      }
-      let changeFile = file;
-      if ((file.id === currentFolder?.id || file.expanded) && file.type === 'folder') {
-        changeFile = getParentFolderDetails(folders, file, file.path.split(',').map(Number));
-      }
-      dispatch(setSelectedFolder(changeFile));
-    }, []);
+    const handleToggle = useCallback(
+      e => {
+        e.stopPropagation();
+        if (file.type === 'folder') {
+          dispatch(setCurrentFolderExpanded(file));
+        }
+        if (file.type === 'file') {
+          const newFile = file.id === currentFile?.id ? null : file;
+          dispatch(setCurrentFile(newFile));
+        }
+        let changeFile = file;
+        if ((file.id === currentFolder?.id || file.expanded) && file.type === 'folder') {
+          changeFile = getParentFolderDetails(folders, file, file.path.split(','));
+        }
+        dispatch(setSelectedFolder(changeFile));
+      },
+      [file, currentFile, currentFolder, folders, dispatch]
+    );
 
     const paddingStyle = useMemo(
       () => ({
@@ -92,7 +96,7 @@ const FileListItem = React.memo(
       () => ({
         left: `${level ? level * 28 - file.level : 5}px`,
       }),
-      [level, file.level]
+      [level, file]
     );
 
     const children = useMemo(() => {
@@ -114,7 +118,7 @@ const FileListItem = React.memo(
 
     return (
       <>
-        <tr className="file-list__row" onClick={handleIconClick}>
+        <tr className="file-list__row" onClick={handleToggle}>
           <td className="file-list__cell file-list__cell--icon" style={paddingStyle}>
             <span style={cursorStyle}>
               {file.type === 'folder' ? (
