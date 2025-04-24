@@ -35,7 +35,7 @@ const folderSlice = createSlice({
       const folders = getCurrentFolderExpanded(
         state.folders,
         action.payload,
-        action.payload.path.split(',').map(Number)
+        action.payload.path.split(',')
       );
       state.folders = folders;
     },

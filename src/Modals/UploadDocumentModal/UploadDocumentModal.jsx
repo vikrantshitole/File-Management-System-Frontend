@@ -97,7 +97,7 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
         cleanupEventSource();
 
         const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || '';
-        const url = `${baseUrl}/files/progress/${id}`;
+        const url = `${baseUrl}/files/progress/${id}?api_key=${import.meta.env.VITE_API_KEY}`;
 
         const eventSource = new EventSource(url);
         eventSourceRef.current = eventSource;

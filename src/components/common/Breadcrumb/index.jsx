@@ -12,7 +12,7 @@ const Breadcrumb = React.memo(
     const breadcrumb = useMemo(() => {
       let currentFolderPath =
         currentFolder && currentFolder.type === 'folder'
-          ? currentFolder.path.split(',').map(Number)
+          ? currentFolder.path.split(',')
           : [];
       return getbreadcrumb(folders, currentFolderPath);
     }, [folders, currentFolder]);
