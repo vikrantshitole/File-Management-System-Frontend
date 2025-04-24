@@ -21,7 +21,7 @@ const MainContent = ({ filterData }) => {
     const fetchData = async () => {
       try {
         let query = `page=${currentPage}&limit=${itemsPerPage}`;
-        let queryParams = { page: currentPage, limit: itemsPerPage };
+        let queryParams = { page: currentPage, limit: itemsPerPage, sort_by: 'updated_at', sort_order: 'desc' };
         const { name, description, date } = filterData;
         if (name) {
           query += `&name=${name}`;

@@ -9,6 +9,13 @@ const instance = axios.create({
   },
 });
 
+// Add a request interceptor
+instance.interceptors.request.use(config => {
+  config.headers['X-API-KEY'] = import.meta.env.VITE_API_KEY;
+  config.headers['Origin'] = import.meta.env.VITE_ORIGIN;
+  return config;
+});
+
 // Add a response interceptor
 instance.interceptors.response.use(
   response => {
