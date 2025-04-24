@@ -6,10 +6,10 @@ import store from './store/index.js';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.jsx';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-        <Provider store={store}>
-            <ErrorBoundary>
-              <App />
-            </ErrorBoundary>
-        </Provider>
+    <Provider store={store}>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </Provider>
   </React.StrictMode>
 );

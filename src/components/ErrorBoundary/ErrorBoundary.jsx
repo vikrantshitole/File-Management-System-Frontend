@@ -12,17 +12,17 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Error caught by ErrorBoundary:", error, errorInfo);
+    console.error('Error caught by ErrorBoundary:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-        return (
-            <div className="error-boundary">
-                <h2>Something went wrong. Please try again later.</h2>
-                <button onClick={() => window.location.reload()}>Reload</button>
-            </div>
-        );
+      return (
+        <div className="error-boundary">
+          <h2>Something went wrong. Please try again later.</h2>
+          <button onClick={() => window.location.reload()}>Reload</button>
+        </div>
+      );
     }
 
     return this.props.children;

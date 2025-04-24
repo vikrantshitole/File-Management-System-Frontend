@@ -94,20 +94,22 @@ const FileListItem = React.memo(
       }),
       [level, file.level]
     );
-    
+
     const children = useMemo(() => {
-      return file.children && file.children.length > 0 ? file.children.map(child => {
-        return (
-         <FileListItem
-            key={child.type === 'folder' ? child.id : child.id + child.file_path}
-            file={child}
-            level={level + 1}
-            onUploadFile={onUploadFile}
-            onCreateFolder={onCreateFolder}
-            onUpdateFolder={onUpdateFolder}
-          />
-        );
-      }) : [];
+      return file.children && file.children.length > 0
+        ? file.children.map(child => {
+            return (
+              <FileListItem
+                key={child.type === 'folder' ? child.id : child.id + child.file_path}
+                file={child}
+                level={level + 1}
+                onUploadFile={onUploadFile}
+                onCreateFolder={onCreateFolder}
+                onUpdateFolder={onUpdateFolder}
+              />
+            );
+          })
+        : [];
     }, [file.children]);
 
     return (
