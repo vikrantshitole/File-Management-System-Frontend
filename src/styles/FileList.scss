@@ -1,7 +1,6 @@
 @use '@styles/variables' as *;
 
 .file-list {
-  background-color: $white;
   border-radius: $border-radius;
   box-shadow: $shadow-sm;
   overflow: auto;
@@ -16,7 +15,9 @@
 
   &__table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background-color: transparent;
 
     @media (max-width: 767px) {
       display: block;
@@ -27,9 +28,9 @@
     padding: $spacing-md;
     text-align: left;
     font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-semibold;
     color: $text-color-secondary;
-    background-color: $background-color-light;
+
     border-bottom: 1px solid $border-color;
 
     @media (max-width: 767px) {
@@ -61,33 +62,44 @@
   }
 
   &__row {
-    border-bottom: 1px solid $border-color;
-    transition: all 0.2s ease;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
     background-color: $white;
-
+    transition: all 0.2s ease;
+    position: relative;
+    margin-bottom: $spacing-sm;
+    
+  border: 1px solid black;
+  border-radius: 10px;
     @media (max-width: 767px) {
       display: flex;
       padding: $spacing-md;
-      margin-bottom: $spacing-md;
-      border-radius: $border-radius;
+      margin-bottom: $spacing-sm;
       box-shadow: $shadow-sm;
       background-color: $white;
-      position: relative;
       align-items: center;
     }
-
+  
     &:hover {
       background-color: $background-color-light;
-
+  
       .more-button {
         opacity: 1;
       }
     }
-
+  
+    &--expanded {
+      background-color: #f5f7fa; // Use the background color from the screenshot
+      box-shadow: $shadow-sm;
+      &__folder-icon {
+       margin-left: 10px; background-color: $background-color-light;
+      }
+    }
     &:last-child {
       border-bottom: none;
     }
   }
+  
 
   &__cell {
     padding: $spacing-md;
@@ -100,7 +112,10 @@
       border: none;
       min-height: auto;
     }
-
+    &.__folder-icon{
+      position: relative;
+    }
+  
     &--icon {
       width: 48px;
       padding-right: 0;
@@ -113,7 +128,7 @@
 
       .badge {
         position: absolute;
-        top: 5px;
+        top: 8px;
         left: 5px;
         background-color: $background-color-badge;
         border-radius: $border-radius-lg;
@@ -123,7 +138,7 @@
         color: $text-color;
 
         @media (max-width: 1400px) {
-          top: 6px;
+          top: 10px;
         }
 
         @media (max-width: 1071px) {
@@ -171,7 +186,9 @@
         display: none;
       }
     }
-
+    .date-bold {
+      font-weight: $font-weight-semibold;
+    }
     &--actions {
       width: 48px;
       text-align: center;

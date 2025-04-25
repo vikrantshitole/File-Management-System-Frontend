@@ -1,12 +1,13 @@
 // Colors
 $white: #ffffff;
 $primary-color: #2d336b;
-$text-color: #1f2937;
-$text-color-secondary: #6b7280;
+$text-color: #000000;
+$text-color-secondary: #444444;
 $text-color-white: #ffffff;
 $background-color: #f3f4f6;
 $background-color-light: #f9fafb;
 $background-color-primary: #2d336b;
+$background-color-secondary: #6b7280;
 $background-color-badge: #ffd95f;
 $border-color: #e5e7eb;
 $error-color: #dc2626;
@@ -15,7 +16,7 @@ $error-color: #dc2626;
 $font-family-base:
   -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 $font-size-base: 1rem;
-$font-size-sm: 0.875rem;
+$font-size-sm: 0.8125rem;
 $font-size-xs: 0.6rem;
 $font-size-lg: 1.125rem;
 $font-weight-normal: 400;
@@ -40,6 +41,7 @@ $border-radius-lg: 0.75rem;
 $shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
 $shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+$shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
 
 // Z-index
 $z-index-dropdown: 1000;

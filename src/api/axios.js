@@ -11,7 +11,7 @@ const instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(config => {
-  config.headers['X-API-KEY'] = import.meta.env.VITE_API_KEY;
+  config.headers['API-KEY'] = import.meta.env.VITE_API_KEY;
   return config;
 });
 

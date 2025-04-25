@@ -13,6 +13,7 @@ import {
 } from '@store/slices/folderSlice';
 import { getParentFolderDetails, formatDate } from '@utils';
 import DeleteConfirmationModal from '@modals/DeleteConfirmationModal/DeleteConfirmationModal';
+import { formatTime } from '../../utils';
 
 const FileListItem = React.memo(
   ({ file, level = 0, onUploadFile, onCreateFolder, onUpdateFolder }) => {
@@ -118,9 +119,12 @@ const FileListItem = React.memo(
 
     return (
       <>
-        <tr className="file-list__row" onClick={handleToggle}>
+        <tr
+          className={`file-list__row${file.expanded ? ' file-list__row--expanded' : ''}`}
+          onClick={handleToggle}
+        >
           <td className="file-list__cell file-list__cell--icon" style={paddingStyle}>
-            <span style={cursorStyle}>
+             <span style={cursorStyle}>
               {file.type === 'folder' ? (
                 <>
                   <span className="badge" style={badgeStyle}>
@@ -134,9 +138,9 @@ const FileListItem = React.memo(
             </span>
           </td>
           <td className="file-list__cell file-list__cell--name">{file.name}</td>
-          <td className="file-list__cell file-list__cell--description">{file.description}</td>
-          <td className="file-list__cell file-list__cell--date">{formatDate(file.created_at)}</td>
-          <td className="file-list__cell file-list__cell--date">{formatDate(file.updated_at)}</td>
+          <td className="file-list__cell file-list__cell--description">{file.description||'---'}</td>
+          <td className="file-list__cell file-list__cell--date">{formatDate(file.created_at)} <span className='date-bold'>{formatTime(file.created_at)}</span></td>
+          <td className="file-list__cell file-list__cell--date">{formatDate(file.updated_at)} <span className='date-bold'>{formatTime(file.created_at)}</span></td>
           <td className="file-list__cell file-list__cell--actions">
             <button
               className="file-list__action-button"

@@ -62,11 +62,9 @@ const Header = React.memo(
         isDropdownOpen && (
           <div className="header__dropdown-menu">
             <button className="header__dropdown-item" onClick={handleCreateFolder}>
-              <Vector size={16} />
               <span>Create Folder</span>
             </button>
             <button className="header__dropdown-item" onClick={handleUploadDocument}>
-              <Upload size={16} />
               <span>Upload Document</span>
             </button>
           </div>

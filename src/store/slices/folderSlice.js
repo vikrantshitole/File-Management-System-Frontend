@@ -8,6 +8,7 @@ const initialState = {
   refreshData: true,
   folderCount: 0,
   fileCount: 0,
+  selectedFolder: null,
 };
 
 // Create the slice
@@ -27,6 +28,7 @@ const folderSlice = createSlice({
       state.refreshData = false;
       state.folderCount = counts.total_folders;
       state.fileCount = counts.total_files;
+      state.selectedFolder = null 
     },
     setRefreshData: (state, action) => {
       state.refreshData = action.payload;
