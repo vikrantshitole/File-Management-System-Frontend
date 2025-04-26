@@ -3,7 +3,8 @@ import Modal from '@modals/Modal';
 import { Trash2 } from 'react-feather';
 import '@styles/Modals/DeleteConfirmationModal.scss';
 import { setRefreshData } from '@store/slices/folderSlice';
-import { useDispatch } from 'react-redux';
+import { selectCurrentFile, setCurrentFile } from '@store/slices/fileSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '@api/axios';
 
 const DeleteConfirmationModal = React.memo(
@@ -15,13 +16,16 @@ const DeleteConfirmationModal = React.memo(
     itemId,
   }) => {
     const dispatch = useDispatch();
-
+    const currentFile = useSelector(selectCurrentFile);
     const handleConfirm = useCallback(() => {
       api
         .delete(`/${itemType}s/` + itemId)
         .then(response => {
           onClose();
           dispatch(setRefreshData(true));
+          if (currentFile && currentFile.id === itemId) {
+            dispatch(setCurrentFile(null));
+          }
         })
         .catch(error => {
           console.error('Error deleting file:', error);

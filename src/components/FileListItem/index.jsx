@@ -51,14 +51,14 @@ const FileListItem = React.memo(
       onUploadFile(file);
     }, []);
 
-    const menuPosition = useMemo(() => {
+    const menuPosition = () => {
       if (!moreButtonRef.current) return { x: 0, y: 0 };
       const rect = moreButtonRef.current.getBoundingClientRect();
       return {
         x: rect.right,
         y: rect.top + 20,
       };
-    }, [moreButtonRef.current]);
+    }
 
     const handleToggle = useCallback(
       e => {
@@ -162,7 +162,7 @@ const FileListItem = React.memo(
               isOpen={isMenuOpen}
               isFolder={isFolder}
               onClose={() => setIsMenuOpen(false)}
-              position={menuPosition}
+              position={menuPosition()}
               onEdit={handleEdit}
               onDelete={handleDelete}
               onCreateFolder={handleCreateFolder}
