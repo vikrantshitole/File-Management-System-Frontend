@@ -68,9 +68,9 @@
     transition: all 0.2s ease;
     position: relative;
     margin-bottom: $spacing-sm;
-    
-  border: 1px solid black;
-  border-radius: 10px;
+
+    border: 1px solid black;
+    border-radius: 10px;
     @media (max-width: 767px) {
       display: flex;
       padding: $spacing-md;
@@ -79,27 +79,27 @@
       background-color: $white;
       align-items: center;
     }
-  
+
     &:hover {
       background-color: $background-color-light;
-  
+
       .more-button {
         opacity: 1;
       }
     }
-  
+
     &--expanded {
       background-color: #f5f7fa; // Use the background color from the screenshot
       box-shadow: $shadow-sm;
       &__folder-icon {
-       margin-left: 10px; background-color: $background-color-light;
+        margin-left: 10px;
+        background-color: $background-color-light;
       }
     }
     &:last-child {
       border-bottom: none;
     }
   }
-  
 
   &__cell {
     padding: $spacing-md;
@@ -112,10 +112,10 @@
       border: none;
       min-height: auto;
     }
-    &.__folder-icon{
+    &.__folder-icon {
       position: relative;
     }
-  
+
     &--icon {
       width: 48px;
       padding-right: 0;

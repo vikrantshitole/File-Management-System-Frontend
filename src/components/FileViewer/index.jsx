@@ -37,7 +37,10 @@ const FileViewer = () => {
   params.append('origin', window.location.origin);
   params.append('api_key', import.meta.env.VITE_API_KEY);
 
-  const fileUrl = import.meta.env.VITE_API_IMAGE_URL + file.file_path + `?origin=${window.location.origin}&api_key=${import.meta.env.VITE_API_KEY}`;
+  const fileUrl =
+    import.meta.env.VITE_API_IMAGE_URL +
+    file.file_path +
+    `?origin=${window.location.origin}&api_key=${import.meta.env.VITE_API_KEY}`;
 
   return (
     <div className="file-viewer">

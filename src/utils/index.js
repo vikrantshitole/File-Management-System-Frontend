@@ -37,7 +37,8 @@ export const formatTime = dateString => {
       hour: '2-digit',
       minute: '2-digit',
     })
-    .replace(',', '').split(' ')[1];
+    .replace(',', '')
+    .split(' ')[1];
 };
 export const getCurrentFolderExpanded = (folders, folder, target) => {
   let newFolders = [];

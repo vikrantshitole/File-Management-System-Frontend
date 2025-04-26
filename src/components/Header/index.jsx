@@ -71,7 +71,6 @@ const Header = React.memo(
         ),
       [isDropdownOpen, handleCreateFolder, handleUploadDocument]
     );
-
     return (
       <header className="header">
         <Breadcrumb setSideBarOpen={setSideBarOpen} sideBarOpen={sideBarOpen} />

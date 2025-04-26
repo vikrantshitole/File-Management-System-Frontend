@@ -34,7 +34,7 @@ const FileListItem = React.memo(
     const handleEdit = useCallback(() => {
       onUpdateFolder(file);
       setIsMenuOpen(false);
-    }, []);
+    }, [file]);
 
     const handleDelete = useCallback(() => {
       setIsMenuOpen(false);
@@ -124,7 +124,7 @@ const FileListItem = React.memo(
           onClick={handleToggle}
         >
           <td className="file-list__cell file-list__cell--icon" style={paddingStyle}>
-             <span style={cursorStyle}>
+            <span style={cursorStyle}>
               {file.type === 'folder' ? (
                 <>
                   <span className="badge" style={badgeStyle}>
@@ -138,9 +138,17 @@ const FileListItem = React.memo(
             </span>
           </td>
           <td className="file-list__cell file-list__cell--name">{file.name}</td>
-          <td className="file-list__cell file-list__cell--description">{file.description||'---'}</td>
-          <td className="file-list__cell file-list__cell--date">{formatDate(file.created_at)} <span className='date-bold'>{formatTime(file.created_at)}</span></td>
-          <td className="file-list__cell file-list__cell--date">{formatDate(file.updated_at)} <span className='date-bold'>{formatTime(file.created_at)}</span></td>
+          <td className="file-list__cell file-list__cell--description">
+            {file.description || '---'}
+          </td>
+          <td className="file-list__cell file-list__cell--date">
+            {formatDate(file.created_at)}{' '}
+            <span className="date-bold">{formatTime(file.created_at)}</span>
+          </td>
+          <td className="file-list__cell file-list__cell--date">
+            {formatDate(file.updated_at)}{' '}
+            <span className="date-bold">{formatTime(file.created_at)}</span>
+          </td>
           <td className="file-list__cell file-list__cell--actions">
             <button
               className="file-list__action-button"
