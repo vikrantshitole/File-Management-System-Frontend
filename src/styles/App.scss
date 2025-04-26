@@ -121,3 +121,9 @@ body {
     margin-right: $value;
   }
 }
+.error-message {
+  color: $error-color;
+  font-size: $font-size-sm;
+  margin-top: $spacing-xs;
+}
+

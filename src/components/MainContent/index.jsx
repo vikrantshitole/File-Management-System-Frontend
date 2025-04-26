@@ -5,13 +5,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import api from '@api/axios';
 import { selectAllFolders, selectRefreshData, setFolders } from '@store/slices/folderSlice';
 import Pagination from '@components/common/Pagination';
+import { useAuth } from '../../context/AuthContext';
 
 const MainContent = React.memo(
   ({ filterData }) => {
     const files = useSelector(selectAllFolders);
     const refreshData = useSelector(selectRefreshData);
     const dispatch = useDispatch();
-
+    const { isAuthenticated, generateToken, token } = useAuth();
     const [pagination, setPagination] = useState({
       page: 1,
       totalPages: 1,
@@ -39,24 +40,25 @@ const MainContent = React.memo(
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await api.get(`/folders?${queryParams}`);
-          const { data, counts, pagination: paginationData } = response.data;
+          if (isAuthenticated) {
+            const response = await api.get(`/folders?${queryParams}`);
+            const { data, counts, pagination: paginationData } = response.data;
 
-          dispatch(setFolders({ folders: data, counts }));
-          setPagination(prev => ({
-            ...prev,
-            page: paginationData.page,
-            totalPages: paginationData.total_pages,
-            totalItems: paginationData.total,
-            itemsPerPage: paginationData.limit,
-          }));
+            dispatch(setFolders({ folders: data, counts }));
+            setPagination(prev => ({
+              ...prev,
+              page: paginationData.page,
+              totalPages: paginationData.total_pages,
+              totalItems: paginationData.total,
+              itemsPerPage: paginationData.limit,
+            }));
+          }
         } catch (error) {
           console.error('Error fetching folder hierarchy:', error);
         }
       };
-
       fetchData();
-    }, [queryParams, dispatch, refreshData]);
+    }, [queryParams, dispatch, refreshData, isAuthenticated]);
 
     const handlePageChange = useCallback(page => {
       setPagination(prev => ({ ...prev, page }));

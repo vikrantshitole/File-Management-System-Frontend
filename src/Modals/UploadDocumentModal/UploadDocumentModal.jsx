@@ -7,6 +7,7 @@ import api from '@api/axios';
 import UploadProgressModal from '@modals/UploadProgressModal/UploadProgressModal';
 import { useDispatch } from 'react-redux';
 import { setRefreshData } from '@store/slices/folderSlice';
+import authService from '../../api/auth';
 const mimeTypes = {
   'application/pdf': ['.pdf'],
   'text/plain': ['.txt'],
@@ -97,7 +98,12 @@ const UploadDocumentModal = ({ isOpen, onClose, folderId = null }) => {
         cleanupEventSource();
 
         const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || '';
-        const url = `${baseUrl}/files/progress/${id}?api_key=${import.meta.env.VITE_API_KEY}`;
+        const apiKey = import.meta.env.VITE_API_KEY;
+        const token = authService.getToken();
+        const params = new URLSearchParams();
+        params.append('api_key', apiKey);
+        params.append('token', `Bearer ${token}`);
+        const url = `${baseUrl}/files/progress/${id}?${params.toString()}`;
 
         const eventSource = new EventSource(url);
         eventSourceRef.current = eventSource;
