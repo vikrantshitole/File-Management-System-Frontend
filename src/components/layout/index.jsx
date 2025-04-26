@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import LeftPanel from '@components/LeftPanel';
 import Sidebar from '@components/Sidebar';
@@ -7,12 +7,13 @@ import Header from '@components/Header';
 import FileViewer from '@components/FileViewer';
 import { selectCurrentFile } from '@store/slices/fileSlice';
 import '@styles/components/layout/_layout.scss';
+import { useAuth } from '../../context/AuthContext';
 
 const Layout = React.memo(() => {
   const file = useSelector(selectCurrentFile);
   const [filterData, setFilterData] = useState({});
   const [sideBarOpen, setSideBarOpen] = useState(true);
-
+  const { generateToken, isAuthenticated } = useAuth();
   const handleSetFilterData = useCallback(data => {
     setFilterData(data);
   }, []);
@@ -28,6 +29,12 @@ const Layout = React.memo(() => {
     [file]
   );
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      generateToken();
+    }
+  }, [isAuthenticated]);
+
   return (
     <div className="layout">
       <LeftPanel />
@@ -40,7 +47,7 @@ const Layout = React.memo(() => {
             sideBarOpen={sideBarOpen}
           />
           <div className="layout__main-content">
-            <MainContent filterData={filterData} />
+            {isAuthenticated && <MainContent filterData={filterData} />}
             <FileViewer />
           </div>
         </div>
