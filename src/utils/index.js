@@ -26,10 +26,18 @@ export const formatDate = dateString => {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
+    })
+    .replace(',', '');
+};
+
+export const formatTime = dateString => {
+  const date = new Date(dateString);
+  return date
+    .toLocaleDateString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
     })
-    .replace(',', '');
+    .replace(',', '').split(' ')[1];
 };
 export const getCurrentFolderExpanded = (folders, folder, target) => {
   let newFolders = [];
